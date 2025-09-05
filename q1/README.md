@@ -1,15 +1,13 @@
-# Bank Marketing ML Assignment Starter
+# Bank Marketing Starter
 
-This repository contains a full scaffold to complete your assignment end-to-end on the UCI Bank Marketing dataset.
+This repository contains a full scaffold to complete end-to-end on the UCI Bank Marketing dataset.
 
 ## Quick start
-1. Download `bank-additional-full.csv` (semicolon-separated) from the UCI repository and put it into `data/`.
+1. Add `bank-additional-full.csv` (semicolon-separated) from the UCI repository and put it into `data/`.
 2. Create a virtual environment and install requirements:
    ```bash
    python -m venv .venv
-   # Windows: .venv\Scripts\activate
-   # Mac/Linux:
-   source .venv/bin/activate
+   # Windows: .venv\Scripts\activate  
    pip install -r requirements.txt
    ```
 3. (Optional) Launch MLflow UI in a separate terminal:
@@ -26,7 +24,3 @@ This repository contains a full scaffold to complete your assignment end-to-end 
    ```bash
    uvicorn src.serve:app --reload
    ```
-
-## Notes
-- We drop `duration` to avoid label leakage (the call length is known only after the call).
-- We use stratified splits, threshold tuning, and PR-AUC/F1 emphasis due to class imbalance.
