@@ -1,0 +1,14 @@
+artifact_uri: file:///G:/My Drive/github/msc-ml-cw/q1/mlruns/696056538806826307/8f891876637047c09d952e8773f59f90/artifacts
+end_time: 1757077381376
+entry_point_name: ''
+experiment_id: '696056538806826307'
+lifecycle_stage: active
+run_id: 8f891876637047c09d952e8773f59f90
+run_name: xgb
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757077082025
+status: 3
+tags: []
+user_id: User

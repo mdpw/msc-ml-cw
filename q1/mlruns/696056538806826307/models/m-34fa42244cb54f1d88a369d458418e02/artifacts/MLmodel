@@ -1,0 +1,22 @@
+artifact_path: file:///G:/My Drive/github/msc-ml-cw/q1/mlruns/696056538806826307/models/m-34fa42244cb54f1d88a369d458418e02/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.10.10
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.1
+mlflow_version: 3.3.2
+model_id: m-34fa42244cb54f1d88a369d458418e02
+model_size_bytes: 4447
+model_uuid: m-34fa42244cb54f1d88a369d458418e02
+prompts: null
+run_id: df3a8b7575c74724a0470c84cb598659
+utc_time_created: '2025-09-05 12:48:31.311681'

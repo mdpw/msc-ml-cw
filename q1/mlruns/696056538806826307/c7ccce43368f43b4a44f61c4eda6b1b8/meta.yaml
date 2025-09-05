@@ -1,0 +1,14 @@
+artifact_uri: file:///G:/My Drive/github/msc-ml-cw/q1/mlruns/696056538806826307/c7ccce43368f43b4a44f61c4eda6b1b8/artifacts
+end_time: 1757076969523
+entry_point_name: ''
+experiment_id: '696056538806826307'
+lifecycle_stage: active
+run_id: c7ccce43368f43b4a44f61c4eda6b1b8
+run_name: rf
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757076717997
+status: 3
+tags: []
+user_id: User

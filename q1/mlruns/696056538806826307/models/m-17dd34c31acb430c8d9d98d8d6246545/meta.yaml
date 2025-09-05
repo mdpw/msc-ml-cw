@@ -1,0 +1,10 @@
+artifact_location: file:///G:/My Drive/github/msc-ml-cw/q1/mlruns/696056538806826307/models/m-17dd34c31acb430c8d9d98d8d6246545/artifacts
+creation_timestamp: 1757077337596
+experiment_id: '696056538806826307'
+last_updated_timestamp: 1757077381142
+model_id: m-17dd34c31acb430c8d9d98d8d6246545
+model_type: null
+name: model
+source_run_id: 8f891876637047c09d952e8773f59f90
+status: 2
+status_message: null
