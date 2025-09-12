@@ -16,21 +16,26 @@ class ProphetPreprocessor:
         self.config = config
         self.scaler = StandardScaler()        
    
-    def create_prophet_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:         
-        df = df.copy()  # safe copy
+    def create_prophet_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
+        df = df.copy()
 
-        # Ensure numeric
-        df['total_load_actual'] = pd.to_numeric(df['total_load_actual'], errors='coerce')
+        # Reset index to make sure 'ds' is a column
+        if not 'ds' in df.columns:
+            df = df.reset_index().rename(columns={'time': 'ds'})
 
-        # Create dataframe
-        prophet_df = pd.DataFrame({
-            'ds': df.index,
-            'y': df['total_load_actual'].values  # <- use .values to avoid index alignment issues
-        })
+        # Ensure datetime type
+        df['ds'] = pd.to_datetime(df['ds'])
 
-        print(prophet_df.head())
-        print(f"Prophet dataframe created with shape: {prophet_df.shape}")
-        return prophet_df   
+        # Ensure numeric target
+        df['y'] = pd.to_numeric(df['total_load_actual'], errors='coerce')
+
+        # Drop duplicate 'total_load_actual' (since it's now 'y')
+        if 'total_load_actual' in df.columns:
+            df = df.drop(columns=['total_load_actual'])
+
+        print(df.head())
+        print(f"Prophet dataframe created with shape: {df.shape}")
+        return df 
     
     def scale_regressors(self, df: pd.DataFrame, fit: bool = True) -> pd.DataFrame:
         df = df.copy()
@@ -51,25 +56,29 @@ class ProphetPreprocessor:
         return df
     
    
-    def prepare_data_for_prophet(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:        
+    def prepare_data_for_prophet(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
         print("Starting preprocessing pipeline...")
-        
+
         # Train-test split
         preprocessor = base_preprocessor.Preprocessor(self.config)
         train_df, test_df = preprocessor.train_test_split(df)
 
+        # 🔹 Encode categorical before Prophet
+        for split in [train_df, test_df]:
+            split['season'] = split['season'].astype(str)  # ensure string
+        train_df = pd.get_dummies(train_df, columns=['season'], prefix='season', drop_first=True)
+        test_df  = pd.get_dummies(test_df,  columns=['season'], prefix='season', drop_first=True)
+
         # Convert to Prophet format
         train_df = self.create_prophet_dataframe(train_df)
-        test_df = self.create_prophet_dataframe(test_df)   
-        
+        test_df  = self.create_prophet_dataframe(test_df)   
+
         # Scale regressors
         train_df = self.scale_regressors(train_df, fit=True)
-        test_df = self.scale_regressors(test_df, fit=False)
-        
+        test_df  = self.scale_regressors(test_df, fit=False)
+
         print("Preprocessing completed successfully!")
         return train_df, test_df
-
-
 
 if __name__ == "__main__":
     # Test preprocessing

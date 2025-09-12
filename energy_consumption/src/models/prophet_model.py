@@ -158,6 +158,8 @@ class EnergyProphetModel:
         
         # Create future dataframe
         future_df = test_df[['ds'] + [col for col in test_df.columns if col != 'y']].copy()
+        future_df = test_df.drop(columns=['y']).copy()
+
         
         # Generate forecast
         forecast = self.model.predict(future_df)
