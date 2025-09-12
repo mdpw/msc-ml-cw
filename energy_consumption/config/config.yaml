@@ -13,20 +13,15 @@ target:
 # Weather features to include as regressors
 weather_features:
   - "temp"
+  - "temp_min"
+  - "temp_max"
   - "humidity" 
   - "wind_speed"
-  - "pressure"
   - "rain_1h"
+  - "rain_3h"
+  - "snow_3h"
   - "clouds_all"
-
-# Cities to include (weight by importance)
-cities:
-  Madrid: 0.3
-  Barcelona: 0.25
-  Valencia: 0.2
-  Seville: 0.15
-  Bilbao: 0.1
-
+  
 # Model parameters
 prophet:
   baseline:

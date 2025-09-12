@@ -1,237 +1,163 @@
-"""
-Data loading utilities for energy and weather datasets.
-"""
-
 import pandas as pd
 import numpy as np
 from typing import Tuple, Dict, Any
+import holidays
 import warnings
 warnings.filterwarnings('ignore')
 
 
 class DataLoader:
-    """Handles loading and initial processing of energy and weather data."""
-    
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         
-    def load_energy_data(self) -> pd.DataFrame:
-        """
-        Load and clean energy dataset.
-        
-        Returns:
-            pd.DataFrame: Cleaned energy data with datetime index
-        """
+    def load_energy_data(self) -> pd.DataFrame:       
         print("Loading energy dataset...")
         
         # Load data
         df_energy = pd.read_csv(self.config['data']['raw_energy_path'])
         
-        # Convert time column to datetime
-        df_energy['time'] = pd.to_datetime(df_energy['time'], utc=True)
-        df_energy = df_energy.set_index('time')
-        
-        # Clean column names (replace spaces with underscores)
+        # Extract only the date part from the string
+        df_energy['time'] = df_energy['time'].astype(str).str.split(' ').str[0]
+
+        # Convert to datetime
+        df_energy['time'] = pd.to_datetime(df_energy['time'])
+
+        # Keep only the needed columns
+        df_energy = df_energy[['time', 'total load actual']]
+
+        # Clean column names
         df_energy.columns = [col.replace(' ', '_').lower() for col in df_energy.columns]
-        
+
+        # Set time as index
+        df_energy = df_energy.set_index('time')
+
+        # Sort by index
+        df_energy = df_energy.sort_index()   
+
+        # Resample to daily frequency and compute the mean for each day and roundup the values.
+        df_energy = df_energy.resample('D').mean().round()        
+
         # Handle missing values
         print(f"Missing values in target variable: {df_energy['total_load_actual'].isnull().sum()}")
         
-        # Forward fill missing values (reasonable for hourly energy data)
-        df_energy['total_load_actual'] = df_energy['total_load_actual'].fillna(method='ffill')
-        
-        # Remove any remaining missing values
+        # Remove rows with any missing values in target variable
         df_energy = df_energy.dropna(subset=['total_load_actual'])
         
         print(f"Energy data shape after cleaning: {df_energy.shape}")
-        print(f"Date range: {df_energy.index.min()} to {df_energy.index.max()}")
+        print(f"Date range: {df_energy.index.min()} to {df_energy.index.max()}")      
         
         return df_energy
     
-    def load_weather_data(self) -> pd.DataFrame:
-        """
-        Load and clean weather dataset.
-        
-        Returns:
-            pd.DataFrame: Cleaned weather data with datetime index
-        """
+    def load_weather_data(self) -> pd.DataFrame:        
         print("Loading weather dataset...")
         
         # Load data
         df_weather = pd.read_csv(self.config['data']['raw_weather_path'])
+
+        # Extract only the date part from the string
+        df_weather['dt_iso'] = df_weather['dt_iso'].astype(str).str.split(' ').str[0]
+
+        # Keep only the needed columns
+        required_cols = ['dt_iso', 'temp', 'temp_min', 'temp_max', 'humidity', 'wind_speed', 'rain_1h', 'rain_3h', 'snow_3h', 'clouds_all']
+        df_weather = df_weather[required_cols]
         
-        # Convert datetime
-        df_weather['dt_iso'] = pd.to_datetime(df_weather['dt_iso'], utc=True)
+        # Parse datetime - handle both full datetime strings and date-only strings
+        df_weather['dt_iso'] = pd.to_datetime(df_weather['dt_iso'], errors='coerce')
         
-        # Clean city names (remove leading/trailing spaces)
-        df_weather['city_name'] = df_weather['city_name'].str.strip()
+        # Drop rows with invalid dates
+        df_weather = df_weather.dropna(subset=['dt_iso'])
         
-        # Convert temperature from Kelvin to Celsius
+        # Convert other columns to numeric
+        numeric_cols = [col for col in df_weather.columns if col not in ['dt_iso']]
+        for col in numeric_cols:
+            df_weather[col] = pd.to_numeric(df_weather[col], errors='coerce')
+        
+        # Convert temperature from Kelvin to Celsius BEFORE resampling
         temp_cols = ['temp', 'temp_min', 'temp_max']
         for col in temp_cols:
             if col in df_weather.columns:
-                df_weather[col] = df_weather[col] - 273.15
-        
-        # Handle missing values in weather data
-        numeric_cols = df_weather.select_dtypes(include=[np.number]).columns
-        df_weather[numeric_cols] = df_weather[numeric_cols].fillna(method='ffill')
-        
-        print(f"Weather data shape: {df_weather.shape}")
-        print(f"Available cities: {df_weather['city_name'].unique()}")
-        
-        return df_weather
-    
-    def aggregate_weather_by_cities(self, df_weather: pd.DataFrame) -> pd.DataFrame:
-        """
-        Aggregate weather data across cities using weighted average.
-        
-        Args:
-            df_weather: Raw weather data
-            
-        Returns:
-            pd.DataFrame: Aggregated weather data with datetime index
-        """
-        print("Aggregating weather data across cities...")
-        
-        # Get city weights from config
-        city_weights = self.config['cities']
-        
-        # Filter for relevant cities
-        relevant_cities = list(city_weights.keys())
-        df_weather_filtered = df_weather[df_weather['city_name'].isin(relevant_cities)]
-        
-        # Aggregate by datetime using weighted average
-        weather_features = self.config['weather_features']
-        
-        aggregated_data = []
-        
-        for timestamp in df_weather_filtered['dt_iso'].unique():
-            timestamp_data = df_weather_filtered[df_weather_filtered['dt_iso'] == timestamp]
-            
-            agg_row = {'dt_iso': timestamp}
-            
-            for feature in weather_features:
-                if feature in timestamp_data.columns:
-                    # Calculate weighted average
-                    weighted_sum = 0
-                    total_weight = 0
-                    
-                    for _, row in timestamp_data.iterrows():
-                        city = row['city_name']
-                        if city in city_weights and not pd.isna(row[feature]):
-                            weighted_sum += row[feature] * city_weights[city]
-                            total_weight += city_weights[city]
-                    
-                    if total_weight > 0:
-                        agg_row[feature] = weighted_sum / total_weight
-                    else:
-                        agg_row[feature] = np.nan
-            
-            aggregated_data.append(agg_row)
-        
-        # Create aggregated dataframe
-        df_weather_agg = pd.DataFrame(aggregated_data)
-        df_weather_agg['dt_iso'] = pd.to_datetime(df_weather_agg['dt_iso'])
-        df_weather_agg = df_weather_agg.set_index('dt_iso')
-        
-        # Sort by index
-        df_weather_agg = df_weather_agg.sort_index()
-        
-        print(f"Aggregated weather data shape: {df_weather_agg.shape}")
-        
-        return df_weather_agg
-    
-    def merge_datasets(self, df_energy: pd.DataFrame, df_weather: pd.DataFrame) -> pd.DataFrame:
-        """
-        Merge energy and weather datasets on timestamp.
-        
-        Args:
-            df_energy: Energy consumption data
-            df_weather: Aggregated weather data
-            
-        Returns:
-            pd.DataFrame: Merged dataset
-        """
-        print("Merging energy and weather datasets...")
-        
-        # Merge on index (datetime)
-        df_merged = df_energy.join(df_weather, how='left')
-        
-        # Forward fill weather data for any missing timestamps
-        weather_cols = self.config['weather_features']
-        for col in weather_cols:
-            if col in df_merged.columns:
-                df_merged[col] = df_merged[col].fillna(method='ffill')
-                df_merged[col] = df_merged[col].fillna(method='bfill')
-        
-        print(f"Merged dataset shape: {df_merged.shape}")
-        print(f"Missing values after merge:")
-        for col in ['total_load_actual'] + weather_cols:
-            if col in df_merged.columns:
-                missing = df_merged[col].isnull().sum()
-                print(f"  {col}: {missing}")
-        
-        return df_merged
-    
-    def load_and_merge_data(self) -> pd.DataFrame:
-        """
-        Complete data loading pipeline.
-        
-        Returns:
-            pd.DataFrame: Final merged and cleaned dataset
-        """
-        # Load individual datasets
-        df_energy = self.load_energy_data()
-        df_weather = self.load_weather_data()
-        
-        # Aggregate weather data
-        df_weather_agg = self.aggregate_weather_by_cities(df_weather)
-        
-        # Merge datasets
-        df_merged = self.merge_datasets(df_energy, df_weather_agg)
-        
-        # Final cleaning - remove any rows with missing target
-        df_merged = df_merged.dropna(subset=['total_load_actual'])
-        
-        print(f"\nFinal dataset ready: {df_merged.shape}")
-        return df_merged
+                df_weather[col] = df_weather[col] - 273.15                                        
 
-# Use this safer approach:
-def safe_handle_missing_values(prophet_df):
-    """
-    Safely handle missing values without removing all data.
-    """
-    initial_len = len(prophet_df)
+        # Group by date and aggregate
+        daily_weather = df_weather.groupby('dt_iso').agg({
+            'temp': 'mean',           # Average temperature
+            'temp_min': 'min',        # Minimum temperature of the day
+            'temp_max': 'max',        # Maximum temperature of the day  
+            'humidity': 'mean',       # Average humidity
+            'wind_speed': 'mean',     # Average wind speed
+            'rain_1h': 'sum',         # Total rainfall (sum of hourly values)
+            'rain_3h': 'sum',         # Total rainfall (sum of 3-hourly values)
+            'snow_3h': 'sum',         # Total snowfall
+            'clouds_all': 'mean'      # Average cloud coverage
+        }).round(2)  # Round to 2 decimal places for better precision
+        
+        # Convert the date index back to datetime for consistency
+        daily_weather.index = pd.to_datetime(daily_weather.index)
+        daily_weather.index.name = 'dt_iso'
+        
+        # Handle missing values - use forward fill then backward fill
+        daily_weather = daily_weather.fillna(method='ffill').fillna(method='bfill')
+        
+        # Sort by index (date)
+        daily_weather = daily_weather.sort_index()
+        
+        print(f"Daily weather data shape: {daily_weather.shape}")
+        print(f"Date range: {daily_weather.index.min()} to {daily_weather.index.max()}")        
+        
+        return daily_weather  
     
-    # 1. Only drop rows where target variable is missing
-    prophet_df = prophet_df.dropna(subset=['y'])
-    
-    # 2. Fill missing values in feature columns instead of dropping rows
-    feature_columns = [col for col in prophet_df.columns if col not in ['ds', 'y']]
-    
-    for col in feature_columns:
-        if prophet_df[col].isna().any():
-            if prophet_df[col].dtype in ['float64', 'int64']:
-                # Fill numeric columns with median
-                prophet_df[col] = prophet_df[col].fillna(prophet_df[col].median())
+    def create_temporal_features(self, df: pd.DataFrame) -> pd.DataFrame: 
+        print("Creating temporal features...")
+        
+        # Holidays in Spain
+        es_holidays = holidays.Spain(years=range(df.index.min().year,
+                                                 df.index.max().year + 1))
+        df['is_holiday'] = df.index.isin(es_holidays).astype(int)
+
+        # Weekend flag (Saturday=5, Sunday=6)
+        df['is_weekend'] = df.index.weekday >= 5
+        df['is_weekend'] = df['is_weekend'].astype(int)        
+        
+        # Seasons (Winter, Spring, Summer, Autumn)
+        def get_season(date):
+            Y = date.year
+            seasons = {
+                "spring": (pd.Timestamp(f"{Y}-03-21"), pd.Timestamp(f"{Y}-06-20")),
+                "summer": (pd.Timestamp(f"{Y}-06-21"), pd.Timestamp(f"{Y}-09-22")),
+                "autumn": (pd.Timestamp(f"{Y}-09-23"), pd.Timestamp(f"{Y}-12-20")),
+            }
+            if seasons["spring"][0] <= date <= seasons["spring"][1]:
+                return "spring"
+            elif seasons["summer"][0] <= date <= seasons["summer"][1]:
+                return "summer"
+            elif seasons["autumn"][0] <= date <= seasons["autumn"][1]:
+                return "autumn"
             else:
-                # Fill categorical columns with mode
-                mode_val = prophet_df[col].mode()
-                fill_val = mode_val[0] if len(mode_val) > 0 else 0
-                prophet_df[col] = prophet_df[col].fillna(fill_val)
+                return "winter"
+
+        df['season'] = df.index.map(get_season)        
+        print("Temporal features created.")
+        
+        return df
     
-    print(f"Safely handled missing values. Removed {initial_len - len(prophet_df)} rows with missing target only")
-    
-    return prophet_df
+    def merge_datasets(self, df_energy: pd.DataFrame, df_weather: pd.DataFrame) -> pd.DataFrame:        
+        print("Merging datasets...")
+        
+        # Merge on date index
+        merged_df = df_energy.join(df_weather, how='inner')
+        
+        print(f"Merged dataset shape: {merged_df.shape}")
+        print(f"Date range: {merged_df.index.min()} to {merged_df.index.max()}")
+        
+        return merged_df
 
 if __name__ == "__main__":
-    # Test data loading
     import yaml
     
     with open('../../config/config.yaml', 'r') as f:
         config = yaml.safe_load(f)
     
     loader = DataLoader(config)
-    data = loader.load_and_merge_data()
-    print(data.head())
-    print(data.info())
+    #data = loader.load_and_merge_data()
+    #print(data.head())
+    #print(data.info())
