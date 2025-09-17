@@ -21,6 +21,10 @@ weather_features:
   - "rain_3h"
   - "snow_3h"
   - "clouds_all"
+
+temporal_features:
+  - 'is_weekend'
+  - 'is_holiday'
   
 # Model parameters
 prophet:
