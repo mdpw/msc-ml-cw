@@ -12,3 +12,6 @@ shap
 fastapi
 uvicorn
 joblib
+torch 
+transformers 
+accelerate

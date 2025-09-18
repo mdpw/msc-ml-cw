@@ -382,6 +382,111 @@ class EnergyForecastVisualizer:
             plt.savefig(save_path, dpi=self.dpi, bbox_inches='tight')
         
         return fig
+    
+    def plot_chronos_forecast(self, forecast: pd.DataFrame, 
+                         actual_df: pd.DataFrame = None,
+                         train_df: pd.DataFrame = None,
+                         save_path: Optional[str] = None) -> plt.Figure:
+        """
+        Plot Chronos forecast results.
+        
+        Args:
+            forecast: Chronos forecast dataframe with columns [ds, yhat, yhat_lower, yhat_upper]
+            actual_df: Actual test data for comparison
+            train_df: Training data to show context
+            save_path: Optional path to save figure
+            
+        Returns:
+            matplotlib Figure
+        """
+        fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
+        
+        # Plot training data if provided (for context)
+        if train_df is not None:
+            # Show only last 100 points of training data for clarity
+            train_subset = train_df.tail(100) if len(train_df) > 100 else train_df
+            ax.plot(train_subset['ds'], train_subset['y'], 
+                label='Training Data', color='blue', alpha=0.7, linewidth=1)
+        
+        # Plot forecast
+        ax.plot(forecast['ds'], forecast['yhat'], 
+            label='Chronos Forecast', color='red', linewidth=2)
+        
+        # Plot confidence intervals
+        ax.fill_between(forecast['ds'], 
+                    forecast['yhat_lower'], 
+                    forecast['yhat_upper'], 
+                    alpha=0.3, color='red', label='Confidence Interval')
+        
+        # Plot actual test data if provided
+        if actual_df is not None:
+            ax.plot(actual_df['ds'], actual_df['y'], 
+                'go', markersize=4, alpha=0.8, label='Actual Test Data')
+        
+        ax.set_title('Chronos Forecast vs Actual', fontsize=14, fontweight='bold')
+        ax.set_xlabel('Date', fontsize=12)
+        ax.set_ylabel('Energy Load (MW)', fontsize=12)
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=self.dpi, bbox_inches='tight')
+        
+        return fig
+
+    def plot_chronos_vs_prophet(self, chronos_forecast: pd.DataFrame,
+                            prophet_forecast: pd.DataFrame,
+                            actual_df: pd.DataFrame,
+                            save_path: Optional[str] = None) -> plt.Figure:
+        """
+        Compare Chronos and Prophet forecasts.
+        
+        Args:
+            chronos_forecast: Chronos predictions
+            prophet_forecast: Prophet predictions  
+            actual_df: Actual test data
+            save_path: Optional path to save figure
+            
+        Returns:
+            matplotlib Figure
+        """
+        fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
+        
+        # Plot actual data
+        ax.plot(actual_df['ds'], actual_df['y'], 
+            'ko-', markersize=3, linewidth=1.5, label='Actual', alpha=0.8)
+        
+        # Plot Chronos forecast
+        ax.plot(chronos_forecast['ds'], chronos_forecast['yhat'],
+            'r-', linewidth=2, label='Chronos Forecast')
+        ax.fill_between(chronos_forecast['ds'],
+                    chronos_forecast['yhat_lower'],
+                    chronos_forecast['yhat_upper'],
+                    alpha=0.2, color='red')
+        
+        # Plot Prophet forecast
+        ax.plot(prophet_forecast['ds'], prophet_forecast['yhat'],
+            'b-', linewidth=2, label='Prophet Forecast')
+        ax.fill_between(prophet_forecast['ds'],
+                    prophet_forecast['yhat_lower'],
+                    prophet_forecast['yhat_upper'],
+                    alpha=0.2, color='blue')
+        
+        ax.set_title('Chronos vs Prophet Forecast Comparison', fontsize=14, fontweight='bold')
+        ax.set_xlabel('Date', fontsize=12)
+        ax.set_ylabel('Energy Load (MW)', fontsize=12)
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=self.dpi, bbox_inches='tight')
+        
+        return fig
+
 
     
 if __name__ == "__main__":
