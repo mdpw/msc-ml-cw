@@ -1,0 +1,1241 @@
+{
+  "problem_number": 1,
+  "company_name": "TechParts Manufacturing Corp.",
+  "planning_period": "Q1 2025",
+  "optimization_method": "Mixed Integer Programming (MIP)",
+  "solver": "PuLP with CBC",
+  "solver_status": "Optimal",
+  "solving_time_seconds": 300.3933024406433,
+  "best_profit_usd": 59187000.0,
+  "number_of_selected_products": 68,
+  "selected_products": [
+    {
+      "sku": "Component-A08",
+      "category": "Component",
+      "profit_usd": 873000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 339.0,
+        "Assembly_Line_Hours": 582.0,
+        "Skilled_Labor_Hours": 285.0,
+        "Raw_Material_Budget_USD": 68.0,
+        "Energy_Consumption_kWh": 765.0,
+        "Warehouse_Space_SqFt": 247.0,
+        "Quality_Inspection_Hours": 681.0,
+        "Setup_Changeover_Hours": 327.0,
+        "Shipping_Capacity_Pallets": 347.0,
+        "Compliance_Hours": 687.0
+      }
+    },
+    {
+      "sku": "Gadget-A12",
+      "category": "Gadget",
+      "profit_usd": 983000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 945.0,
+        "Assembly_Line_Hours": 769.0,
+        "Skilled_Labor_Hours": 114.0,
+        "Raw_Material_Budget_USD": 436.0,
+        "Energy_Consumption_kWh": 150.0,
+        "Warehouse_Space_SqFt": 746.0,
+        "Quality_Inspection_Hours": 871.0,
+        "Setup_Changeover_Hours": 253.0,
+        "Shipping_Capacity_Pallets": 832.0,
+        "Compliance_Hours": 454.0
+      }
+    },
+    {
+      "sku": "Module-A14",
+      "category": "Module",
+      "profit_usd": 935000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 651.0,
+        "Assembly_Line_Hours": 358.0,
+        "Skilled_Labor_Hours": 384.0,
+        "Raw_Material_Budget_USD": 834.0,
+        "Energy_Consumption_kWh": 188.0,
+        "Warehouse_Space_SqFt": 351.0,
+        "Quality_Inspection_Hours": 855.0,
+        "Setup_Changeover_Hours": 715.0,
+        "Shipping_Capacity_Pallets": 938.0,
+        "Compliance_Hours": 191.0
+      }
+    },
+    {
+      "sku": "Widget-A16",
+      "category": "Widget",
+      "profit_usd": 751000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 63.0,
+        "Assembly_Line_Hours": 340.0,
+        "Skilled_Labor_Hours": 506.0,
+        "Raw_Material_Budget_USD": 124.0,
+        "Energy_Consumption_kWh": 61.0,
+        "Warehouse_Space_SqFt": 882.0,
+        "Quality_Inspection_Hours": 233.0,
+        "Setup_Changeover_Hours": 597.0,
+        "Shipping_Capacity_Pallets": 708.0,
+        "Compliance_Hours": 271.0
+      }
+    },
+    {
+      "sku": "Widget-B06",
+      "category": "Widget",
+      "profit_usd": 935000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 722.0,
+        "Assembly_Line_Hours": 931.0,
+        "Skilled_Labor_Hours": 15.0,
+        "Raw_Material_Budget_USD": 816.0,
+        "Energy_Consumption_kWh": 921.0,
+        "Warehouse_Space_SqFt": 295.0,
+        "Quality_Inspection_Hours": 192.0,
+        "Setup_Changeover_Hours": 854.0,
+        "Shipping_Capacity_Pallets": 116.0,
+        "Compliance_Hours": 954.0
+      }
+    },
+    {
+      "sku": "Gadget-B07",
+      "category": "Gadget",
+      "profit_usd": 905000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 461.0,
+        "Assembly_Line_Hours": 806.0,
+        "Skilled_Labor_Hours": 525.0,
+        "Raw_Material_Budget_USD": 235.0,
+        "Energy_Consumption_kWh": 375.0,
+        "Warehouse_Space_SqFt": 115.0,
+        "Quality_Inspection_Hours": 447.0,
+        "Setup_Changeover_Hours": 636.0,
+        "Shipping_Capacity_Pallets": 395.0,
+        "Compliance_Hours": 866.0
+      }
+    },
+    {
+      "sku": "Component-B08",
+      "category": "Component",
+      "profit_usd": 910000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 765.0,
+        "Assembly_Line_Hours": 247.0,
+        "Skilled_Labor_Hours": 58.0,
+        "Raw_Material_Budget_USD": 340.0,
+        "Energy_Consumption_kWh": 620.0,
+        "Warehouse_Space_SqFt": 11.0,
+        "Quality_Inspection_Hours": 869.0,
+        "Setup_Changeover_Hours": 93.0,
+        "Shipping_Capacity_Pallets": 941.0,
+        "Compliance_Hours": 427.0
+      }
+    },
+    {
+      "sku": "Gadget-B12",
+      "category": "Gadget",
+      "profit_usd": 939000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 100.0,
+        "Assembly_Line_Hours": 518.0,
+        "Skilled_Labor_Hours": 627.0,
+        "Raw_Material_Budget_USD": 355.0,
+        "Energy_Consumption_kWh": 63.0,
+        "Warehouse_Space_SqFt": 464.0,
+        "Quality_Inspection_Hours": 784.0,
+        "Setup_Changeover_Hours": 883.0,
+        "Shipping_Capacity_Pallets": 580.0,
+        "Compliance_Hours": 344.0
+      }
+    },
+    {
+      "sku": "Module-B14",
+      "category": "Module",
+      "profit_usd": 911000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 303.0,
+        "Assembly_Line_Hours": 36.0,
+        "Skilled_Labor_Hours": 117.0,
+        "Raw_Material_Budget_USD": 661.0,
+        "Energy_Consumption_kWh": 618.0,
+        "Warehouse_Space_SqFt": 183.0,
+        "Quality_Inspection_Hours": 268.0,
+        "Setup_Changeover_Hours": 691.0,
+        "Shipping_Capacity_Pallets": 773.0,
+        "Compliance_Hours": 713.0
+      }
+    },
+    {
+      "sku": "Assembly-B15",
+      "category": "Assembly",
+      "profit_usd": 789000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 843.0,
+        "Assembly_Line_Hours": 536.0,
+        "Skilled_Labor_Hours": 608.0,
+        "Raw_Material_Budget_USD": 175.0,
+        "Energy_Consumption_kWh": 129.0,
+        "Warehouse_Space_SqFt": 839.0,
+        "Quality_Inspection_Hours": 786.0,
+        "Setup_Changeover_Hours": 380.0,
+        "Shipping_Capacity_Pallets": 131.0,
+        "Compliance_Hours": 280.0
+      }
+    },
+    {
+      "sku": "Gadget-B17",
+      "category": "Gadget",
+      "profit_usd": 977000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 145.0,
+        "Assembly_Line_Hours": 190.0,
+        "Skilled_Labor_Hours": 966.0,
+        "Raw_Material_Budget_USD": 870.0,
+        "Energy_Consumption_kWh": 620.0,
+        "Warehouse_Space_SqFt": 553.0,
+        "Quality_Inspection_Hours": 850.0,
+        "Setup_Changeover_Hours": 569.0,
+        "Shipping_Capacity_Pallets": 193.0,
+        "Compliance_Hours": 464.0
+      }
+    },
+    {
+      "sku": "Module-B19",
+      "category": "Module",
+      "profit_usd": 947000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 104.0,
+        "Assembly_Line_Hours": 809.0,
+        "Skilled_Labor_Hours": 482.0,
+        "Raw_Material_Budget_USD": 972.0,
+        "Energy_Consumption_kWh": 727.0,
+        "Warehouse_Space_SqFt": 217.0,
+        "Quality_Inspection_Hours": 173.0,
+        "Setup_Changeover_Hours": 72.0,
+        "Shipping_Capacity_Pallets": 750.0,
+        "Compliance_Hours": 557.0
+      }
+    },
+    {
+      "sku": "Assembly-B20",
+      "category": "Assembly",
+      "profit_usd": 719000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 81.0,
+        "Assembly_Line_Hours": 267.0,
+        "Skilled_Labor_Hours": 118.0,
+        "Raw_Material_Budget_USD": 374.0,
+        "Energy_Consumption_kWh": 52.0,
+        "Warehouse_Space_SqFt": 131.0,
+        "Quality_Inspection_Hours": 390.0,
+        "Setup_Changeover_Hours": 297.0,
+        "Shipping_Capacity_Pallets": 741.0,
+        "Compliance_Hours": 296.0
+      }
+    },
+    {
+      "sku": "Widget-C06",
+      "category": "Widget",
+      "profit_usd": 849000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 751.0,
+        "Assembly_Line_Hours": 45.0,
+        "Skilled_Labor_Hours": 435.0,
+        "Raw_Material_Budget_USD": 68.0,
+        "Energy_Consumption_kWh": 843.0,
+        "Warehouse_Space_SqFt": 519.0,
+        "Quality_Inspection_Hours": 401.0,
+        "Setup_Changeover_Hours": 762.0,
+        "Shipping_Capacity_Pallets": 82.0,
+        "Compliance_Hours": 75.0
+      }
+    },
+    {
+      "sku": "Module-C09",
+      "category": "Module",
+      "profit_usd": 762000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 139.0,
+        "Assembly_Line_Hours": 158.0,
+        "Skilled_Labor_Hours": 570.0,
+        "Raw_Material_Budget_USD": 144.0,
+        "Energy_Consumption_kWh": 176.0,
+        "Warehouse_Space_SqFt": 715.0,
+        "Quality_Inspection_Hours": 20.0,
+        "Setup_Changeover_Hours": 384.0,
+        "Shipping_Capacity_Pallets": 591.0,
+        "Compliance_Hours": 855.0
+      }
+    },
+    {
+      "sku": "Assembly-C10",
+      "category": "Assembly",
+      "profit_usd": 917000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 740.0,
+        "Assembly_Line_Hours": 142.0,
+        "Skilled_Labor_Hours": 826.0,
+        "Raw_Material_Budget_USD": 720.0,
+        "Energy_Consumption_kWh": 588.0,
+        "Warehouse_Space_SqFt": 867.0,
+        "Quality_Inspection_Hours": 623.0,
+        "Setup_Changeover_Hours": 331.0,
+        "Shipping_Capacity_Pallets": 571.0,
+        "Compliance_Hours": 59.0
+      }
+    },
+    {
+      "sku": "Widget-C11",
+      "category": "Widget",
+      "profit_usd": 936000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 207.0,
+        "Assembly_Line_Hours": 141.0,
+        "Skilled_Labor_Hours": 286.0,
+        "Raw_Material_Budget_USD": 813.0,
+        "Energy_Consumption_kWh": 511.0,
+        "Warehouse_Space_SqFt": 906.0,
+        "Quality_Inspection_Hours": 666.0,
+        "Setup_Changeover_Hours": 688.0,
+        "Shipping_Capacity_Pallets": 571.0,
+        "Compliance_Hours": 373.0
+      }
+    },
+    {
+      "sku": "Gadget-C12",
+      "category": "Gadget",
+      "profit_usd": 1006000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 768.0,
+        "Assembly_Line_Hours": 129.0,
+        "Skilled_Labor_Hours": 685.0,
+        "Raw_Material_Budget_USD": 791.0,
+        "Energy_Consumption_kWh": 407.0,
+        "Warehouse_Space_SqFt": 509.0,
+        "Quality_Inspection_Hours": 583.0,
+        "Setup_Changeover_Hours": 483.0,
+        "Shipping_Capacity_Pallets": 817.0,
+        "Compliance_Hours": 448.0
+      }
+    },
+    {
+      "sku": "Module-C14",
+      "category": "Module",
+      "profit_usd": 768000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 505.0,
+        "Assembly_Line_Hours": 992.0,
+        "Skilled_Labor_Hours": 503.0,
+        "Raw_Material_Budget_USD": 752.0,
+        "Energy_Consumption_kWh": 31.0,
+        "Warehouse_Space_SqFt": 82.0,
+        "Quality_Inspection_Hours": 785.0,
+        "Setup_Changeover_Hours": 180.0,
+        "Shipping_Capacity_Pallets": 43.0,
+        "Compliance_Hours": 195.0
+      }
+    },
+    {
+      "sku": "Widget-C16",
+      "category": "Widget",
+      "profit_usd": 770000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 541.0,
+        "Assembly_Line_Hours": 547.0,
+        "Skilled_Labor_Hours": 1.0,
+        "Raw_Material_Budget_USD": 818.0,
+        "Energy_Consumption_kWh": 340.0,
+        "Warehouse_Space_SqFt": 440.0,
+        "Quality_Inspection_Hours": 522.0,
+        "Setup_Changeover_Hours": 475.0,
+        "Shipping_Capacity_Pallets": 98.0,
+        "Compliance_Hours": 137.0
+      }
+    },
+    {
+      "sku": "Gadget-C17",
+      "category": "Gadget",
+      "profit_usd": 796000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 794.0,
+        "Assembly_Line_Hours": 11.0,
+        "Skilled_Labor_Hours": 395.0,
+        "Raw_Material_Budget_USD": 79.0,
+        "Energy_Consumption_kWh": 441.0,
+        "Warehouse_Space_SqFt": 932.0,
+        "Quality_Inspection_Hours": 267.0,
+        "Setup_Changeover_Hours": 537.0,
+        "Shipping_Capacity_Pallets": 509.0,
+        "Compliance_Hours": 188.0
+      }
+    },
+    {
+      "sku": "Component-C18",
+      "category": "Component",
+      "profit_usd": 774000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 549.0,
+        "Assembly_Line_Hours": 77.0,
+        "Skilled_Labor_Hours": 198.0,
+        "Raw_Material_Budget_USD": 290.0,
+        "Energy_Consumption_kWh": 159.0,
+        "Warehouse_Space_SqFt": 653.0,
+        "Quality_Inspection_Hours": 426.0,
+        "Setup_Changeover_Hours": 530.0,
+        "Shipping_Capacity_Pallets": 129.0,
+        "Compliance_Hours": 612.0
+      }
+    },
+    {
+      "sku": "Module-D04",
+      "category": "Module",
+      "profit_usd": 864000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 391.0,
+        "Assembly_Line_Hours": 599.0,
+        "Skilled_Labor_Hours": 39.0,
+        "Raw_Material_Budget_USD": 480.0,
+        "Energy_Consumption_kWh": 378.0,
+        "Warehouse_Space_SqFt": 290.0,
+        "Quality_Inspection_Hours": 95.0,
+        "Setup_Changeover_Hours": 884.0,
+        "Shipping_Capacity_Pallets": 881.0,
+        "Compliance_Hours": 627.0
+      }
+    },
+    {
+      "sku": "Widget-D06",
+      "category": "Widget",
+      "profit_usd": 963000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 905.0,
+        "Assembly_Line_Hours": 703.0,
+        "Skilled_Labor_Hours": 483.0,
+        "Raw_Material_Budget_USD": 998.0,
+        "Energy_Consumption_kWh": 673.0,
+        "Warehouse_Space_SqFt": 645.0,
+        "Quality_Inspection_Hours": 177.0,
+        "Setup_Changeover_Hours": 53.0,
+        "Shipping_Capacity_Pallets": 256.0,
+        "Compliance_Hours": 259.0
+      }
+    },
+    {
+      "sku": "Component-D08",
+      "category": "Component",
+      "profit_usd": 1057000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 239.0,
+        "Assembly_Line_Hours": 944.0,
+        "Skilled_Labor_Hours": 555.0,
+        "Raw_Material_Budget_USD": 524.0,
+        "Energy_Consumption_kWh": 427.0,
+        "Warehouse_Space_SqFt": 670.0,
+        "Quality_Inspection_Hours": 624.0,
+        "Setup_Changeover_Hours": 966.0,
+        "Shipping_Capacity_Pallets": 158.0,
+        "Compliance_Hours": 551.0
+      }
+    },
+    {
+      "sku": "Assembly-D10",
+      "category": "Assembly",
+      "profit_usd": 649000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 891.0,
+        "Assembly_Line_Hours": 41.0,
+        "Skilled_Labor_Hours": 133.0,
+        "Raw_Material_Budget_USD": 476.0,
+        "Energy_Consumption_kWh": 261.0,
+        "Warehouse_Space_SqFt": 238.0,
+        "Quality_Inspection_Hours": 474.0,
+        "Setup_Changeover_Hours": 21.0,
+        "Shipping_Capacity_Pallets": 401.0,
+        "Compliance_Hours": 924.0
+      }
+    },
+    {
+      "sku": "Widget-D16",
+      "category": "Widget",
+      "profit_usd": 950000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 36.0,
+        "Assembly_Line_Hours": 857.0,
+        "Skilled_Labor_Hours": 118.0,
+        "Raw_Material_Budget_USD": 975.0,
+        "Energy_Consumption_kWh": 373.0,
+        "Warehouse_Space_SqFt": 63.0,
+        "Quality_Inspection_Hours": 159.0,
+        "Setup_Changeover_Hours": 998.0,
+        "Shipping_Capacity_Pallets": 952.0,
+        "Compliance_Hours": 498.0
+      }
+    },
+    {
+      "sku": "Gadget-D17",
+      "category": "Gadget",
+      "profit_usd": 920000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 256.0,
+        "Assembly_Line_Hours": 603.0,
+        "Skilled_Labor_Hours": 889.0,
+        "Raw_Material_Budget_USD": 631.0,
+        "Energy_Consumption_kWh": 393.0,
+        "Warehouse_Space_SqFt": 518.0,
+        "Quality_Inspection_Hours": 122.0,
+        "Setup_Changeover_Hours": 658.0,
+        "Shipping_Capacity_Pallets": 112.0,
+        "Compliance_Hours": 573.0
+      }
+    },
+    {
+      "sku": "Component-D18",
+      "category": "Component",
+      "profit_usd": 797000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 64.0,
+        "Assembly_Line_Hours": 57.0,
+        "Skilled_Labor_Hours": 560.0,
+        "Raw_Material_Budget_USD": 691.0,
+        "Energy_Consumption_kWh": 229.0,
+        "Warehouse_Space_SqFt": 147.0,
+        "Quality_Inspection_Hours": 164.0,
+        "Setup_Changeover_Hours": 571.0,
+        "Shipping_Capacity_Pallets": 482.0,
+        "Compliance_Hours": 232.0
+      }
+    },
+    {
+      "sku": "Widget-E01",
+      "category": "Widget",
+      "profit_usd": 676000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 948.0,
+        "Assembly_Line_Hours": 216.0,
+        "Skilled_Labor_Hours": 802.0,
+        "Raw_Material_Budget_USD": 226.0,
+        "Energy_Consumption_kWh": 92.0,
+        "Warehouse_Space_SqFt": 452.0,
+        "Quality_Inspection_Hours": 394.0,
+        "Setup_Changeover_Hours": 203.0,
+        "Shipping_Capacity_Pallets": 64.0,
+        "Compliance_Hours": 902.0
+      }
+    },
+    {
+      "sku": "Component-E08",
+      "category": "Component",
+      "profit_usd": 898000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 47.0,
+        "Assembly_Line_Hours": 501.0,
+        "Skilled_Labor_Hours": 217.0,
+        "Raw_Material_Budget_USD": 416.0,
+        "Energy_Consumption_kWh": 869.0,
+        "Warehouse_Space_SqFt": 359.0,
+        "Quality_Inspection_Hours": 4.0,
+        "Setup_Changeover_Hours": 110.0,
+        "Shipping_Capacity_Pallets": 795.0,
+        "Compliance_Hours": 914.0
+      }
+    },
+    {
+      "sku": "Module-E14",
+      "category": "Module",
+      "profit_usd": 786000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 75.0,
+        "Assembly_Line_Hours": 353.0,
+        "Skilled_Labor_Hours": 917.0,
+        "Raw_Material_Budget_USD": 33.0,
+        "Energy_Consumption_kWh": 281.0,
+        "Warehouse_Space_SqFt": 119.0,
+        "Quality_Inspection_Hours": 477.0,
+        "Setup_Changeover_Hours": 546.0,
+        "Shipping_Capacity_Pallets": 931.0,
+        "Compliance_Hours": 320.0
+      }
+    },
+    {
+      "sku": "Assembly-E15",
+      "category": "Assembly",
+      "profit_usd": 871000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 29.0,
+        "Assembly_Line_Hours": 807.0,
+        "Skilled_Labor_Hours": 335.0,
+        "Raw_Material_Budget_USD": 372.0,
+        "Energy_Consumption_kWh": 268.0,
+        "Warehouse_Space_SqFt": 215.0,
+        "Quality_Inspection_Hours": 579.0,
+        "Setup_Changeover_Hours": 294.0,
+        "Shipping_Capacity_Pallets": 395.0,
+        "Compliance_Hours": 428.0
+      }
+    },
+    {
+      "sku": "Module-A04",
+      "category": "Module",
+      "profit_usd": 1133000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 994.0,
+        "Assembly_Line_Hours": 733.0,
+        "Skilled_Labor_Hours": 508.0,
+        "Raw_Material_Budget_USD": 823.0,
+        "Energy_Consumption_kWh": 892.0,
+        "Warehouse_Space_SqFt": 511.0,
+        "Quality_Inspection_Hours": 304.0,
+        "Setup_Changeover_Hours": 29.0,
+        "Shipping_Capacity_Pallets": 941.0,
+        "Compliance_Hours": 672.0
+      }
+    },
+    {
+      "sku": "Gadget-A07",
+      "category": "Gadget",
+      "profit_usd": 832000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 270.0,
+        "Assembly_Line_Hours": 478.0,
+        "Skilled_Labor_Hours": 637.0,
+        "Raw_Material_Budget_USD": 663.0,
+        "Energy_Consumption_kWh": 58.0,
+        "Warehouse_Space_SqFt": 618.0,
+        "Quality_Inspection_Hours": 25.0,
+        "Setup_Changeover_Hours": 114.0,
+        "Shipping_Capacity_Pallets": 168.0,
+        "Compliance_Hours": 380.0
+      }
+    },
+    {
+      "sku": "Component-A13",
+      "category": "Component",
+      "profit_usd": 614000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 177.0,
+        "Assembly_Line_Hours": 157.0,
+        "Skilled_Labor_Hours": 175.0,
+        "Raw_Material_Budget_USD": 427.0,
+        "Energy_Consumption_kWh": 249.0,
+        "Warehouse_Space_SqFt": 278.0,
+        "Quality_Inspection_Hours": 411.0,
+        "Setup_Changeover_Hours": 809.0,
+        "Shipping_Capacity_Pallets": 633.0,
+        "Compliance_Hours": 436.0
+      }
+    },
+    {
+      "sku": "Gadget-A17",
+      "category": "Gadget",
+      "profit_usd": 839000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 698.0,
+        "Assembly_Line_Hours": 356.0,
+        "Skilled_Labor_Hours": 969.0,
+        "Raw_Material_Budget_USD": 788.0,
+        "Energy_Consumption_kWh": 211.0,
+        "Warehouse_Space_SqFt": 150.0,
+        "Quality_Inspection_Hours": 119.0,
+        "Setup_Changeover_Hours": 235.0,
+        "Shipping_Capacity_Pallets": 435.0,
+        "Compliance_Hours": 533.0
+      }
+    },
+    {
+      "sku": "Widget-B06",
+      "category": "Widget",
+      "profit_usd": 715000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 621.0,
+        "Assembly_Line_Hours": 462.0,
+        "Skilled_Labor_Hours": 475.0,
+        "Raw_Material_Budget_USD": 515.0,
+        "Energy_Consumption_kWh": 882.0,
+        "Warehouse_Space_SqFt": 552.0,
+        "Quality_Inspection_Hours": 22.0,
+        "Setup_Changeover_Hours": 35.0,
+        "Shipping_Capacity_Pallets": 320.0,
+        "Compliance_Hours": 208.0
+      }
+    },
+    {
+      "sku": "Gadget-B07",
+      "category": "Gadget",
+      "profit_usd": 866000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 413.0,
+        "Assembly_Line_Hours": 467.0,
+        "Skilled_Labor_Hours": 51.0,
+        "Raw_Material_Budget_USD": 479.0,
+        "Energy_Consumption_kWh": 529.0,
+        "Warehouse_Space_SqFt": 69.0,
+        "Quality_Inspection_Hours": 666.0,
+        "Setup_Changeover_Hours": 287.0,
+        "Shipping_Capacity_Pallets": 819.0,
+        "Compliance_Hours": 703.0
+      }
+    },
+    {
+      "sku": "Component-B13",
+      "category": "Component",
+      "profit_usd": 936000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 429.0,
+        "Assembly_Line_Hours": 770.0,
+        "Skilled_Labor_Hours": 977.0,
+        "Raw_Material_Budget_USD": 54.0,
+        "Energy_Consumption_kWh": 380.0,
+        "Warehouse_Space_SqFt": 744.0,
+        "Quality_Inspection_Hours": 520.0,
+        "Setup_Changeover_Hours": 133.0,
+        "Shipping_Capacity_Pallets": 384.0,
+        "Compliance_Hours": 353.0
+      }
+    },
+    {
+      "sku": "Component-B18",
+      "category": "Component",
+      "profit_usd": 1066000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 518.0,
+        "Assembly_Line_Hours": 969.0,
+        "Skilled_Labor_Hours": 944.0,
+        "Raw_Material_Budget_USD": 858.0,
+        "Energy_Consumption_kWh": 770.0,
+        "Warehouse_Space_SqFt": 267.0,
+        "Quality_Inspection_Hours": 236.0,
+        "Setup_Changeover_Hours": 730.0,
+        "Shipping_Capacity_Pallets": 297.0,
+        "Compliance_Hours": 101.0
+      }
+    },
+    {
+      "sku": "Widget-C01",
+      "category": "Widget",
+      "profit_usd": 604000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 55.0,
+        "Assembly_Line_Hours": 883.0,
+        "Skilled_Labor_Hours": 455.0,
+        "Raw_Material_Budget_USD": 222.0,
+        "Energy_Consumption_kWh": 464.0,
+        "Warehouse_Space_SqFt": 331.0,
+        "Quality_Inspection_Hours": 88.0,
+        "Setup_Changeover_Hours": 346.0,
+        "Shipping_Capacity_Pallets": 159.0,
+        "Compliance_Hours": 54.0
+      }
+    },
+    {
+      "sku": "Component-C03",
+      "category": "Component",
+      "profit_usd": 930000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 198.0,
+        "Assembly_Line_Hours": 467.0,
+        "Skilled_Labor_Hours": 458.0,
+        "Raw_Material_Budget_USD": 343.0,
+        "Energy_Consumption_kWh": 949.0,
+        "Warehouse_Space_SqFt": 880.0,
+        "Quality_Inspection_Hours": 486.0,
+        "Setup_Changeover_Hours": 284.0,
+        "Shipping_Capacity_Pallets": 5.0,
+        "Compliance_Hours": 671.0
+      }
+    },
+    {
+      "sku": "Gadget-C12",
+      "category": "Gadget",
+      "profit_usd": 739000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 142.0,
+        "Assembly_Line_Hours": 300.0,
+        "Skilled_Labor_Hours": 218.0,
+        "Raw_Material_Budget_USD": 76.0,
+        "Energy_Consumption_kWh": 180.0,
+        "Warehouse_Space_SqFt": 26.0,
+        "Quality_Inspection_Hours": 859.0,
+        "Setup_Changeover_Hours": 55.0,
+        "Shipping_Capacity_Pallets": 517.0,
+        "Compliance_Hours": 556.0
+      }
+    },
+    {
+      "sku": "Assembly-C20",
+      "category": "Assembly",
+      "profit_usd": 872000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 259.0,
+        "Assembly_Line_Hours": 397.0,
+        "Skilled_Labor_Hours": 615.0,
+        "Raw_Material_Budget_USD": 277.0,
+        "Energy_Consumption_kWh": 595.0,
+        "Warehouse_Space_SqFt": 179.0,
+        "Quality_Inspection_Hours": 845.0,
+        "Setup_Changeover_Hours": 374.0,
+        "Shipping_Capacity_Pallets": 235.0,
+        "Compliance_Hours": 167.0
+      }
+    },
+    {
+      "sku": "Gadget-D02",
+      "category": "Gadget",
+      "profit_usd": 1093000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 623.0,
+        "Assembly_Line_Hours": 947.0,
+        "Skilled_Labor_Hours": 824.0,
+        "Raw_Material_Budget_USD": 67.0,
+        "Energy_Consumption_kWh": 789.0,
+        "Warehouse_Space_SqFt": 669.0,
+        "Quality_Inspection_Hours": 293.0,
+        "Setup_Changeover_Hours": 650.0,
+        "Shipping_Capacity_Pallets": 449.0,
+        "Compliance_Hours": 859.0
+      }
+    },
+    {
+      "sku": "Assembly-D05",
+      "category": "Assembly",
+      "profit_usd": 857000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 953.0,
+        "Assembly_Line_Hours": 280.0,
+        "Skilled_Labor_Hours": 986.0,
+        "Raw_Material_Budget_USD": 379.0,
+        "Energy_Consumption_kWh": 512.0,
+        "Warehouse_Space_SqFt": 728.0,
+        "Quality_Inspection_Hours": 313.0,
+        "Setup_Changeover_Hours": 418.0,
+        "Shipping_Capacity_Pallets": 727.0,
+        "Compliance_Hours": 138.0
+      }
+    },
+    {
+      "sku": "Gadget-D07",
+      "category": "Gadget",
+      "profit_usd": 1059000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 617.0,
+        "Assembly_Line_Hours": 720.0,
+        "Skilled_Labor_Hours": 993.0,
+        "Raw_Material_Budget_USD": 365.0,
+        "Energy_Consumption_kWh": 187.0,
+        "Warehouse_Space_SqFt": 792.0,
+        "Quality_Inspection_Hours": 974.0,
+        "Setup_Changeover_Hours": 153.0,
+        "Shipping_Capacity_Pallets": 475.0,
+        "Compliance_Hours": 971.0
+      }
+    },
+    {
+      "sku": "Gadget-D12",
+      "category": "Gadget",
+      "profit_usd": 885000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 588.0,
+        "Assembly_Line_Hours": 658.0,
+        "Skilled_Labor_Hours": 155.0,
+        "Raw_Material_Budget_USD": 734.0,
+        "Energy_Consumption_kWh": 463.0,
+        "Warehouse_Space_SqFt": 541.0,
+        "Quality_Inspection_Hours": 256.0,
+        "Setup_Changeover_Hours": 208.0,
+        "Shipping_Capacity_Pallets": 151.0,
+        "Compliance_Hours": 118.0
+      }
+    },
+    {
+      "sku": "Component-D13",
+      "category": "Component",
+      "profit_usd": 764000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 577.0,
+        "Assembly_Line_Hours": 816.0,
+        "Skilled_Labor_Hours": 42.0,
+        "Raw_Material_Budget_USD": 307.0,
+        "Energy_Consumption_kWh": 460.0,
+        "Warehouse_Space_SqFt": 881.0,
+        "Quality_Inspection_Hours": 348.0,
+        "Setup_Changeover_Hours": 589.0,
+        "Shipping_Capacity_Pallets": 199.0,
+        "Compliance_Hours": 35.0
+      }
+    },
+    {
+      "sku": "Module-D14",
+      "category": "Module",
+      "profit_usd": 724000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 247.0,
+        "Assembly_Line_Hours": 148.0,
+        "Skilled_Labor_Hours": 263.0,
+        "Raw_Material_Budget_USD": 960.0,
+        "Energy_Consumption_kWh": 683.0,
+        "Warehouse_Space_SqFt": 265.0,
+        "Quality_Inspection_Hours": 169.0,
+        "Setup_Changeover_Hours": 292.0,
+        "Shipping_Capacity_Pallets": 88.0,
+        "Compliance_Hours": 815.0
+      }
+    },
+    {
+      "sku": "Component-E03",
+      "category": "Component",
+      "profit_usd": 944000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 720.0,
+        "Assembly_Line_Hours": 425.0,
+        "Skilled_Labor_Hours": 307.0,
+        "Raw_Material_Budget_USD": 923.0,
+        "Energy_Consumption_kWh": 319.0,
+        "Warehouse_Space_SqFt": 501.0,
+        "Quality_Inspection_Hours": 75.0,
+        "Setup_Changeover_Hours": 992.0,
+        "Shipping_Capacity_Pallets": 190.0,
+        "Compliance_Hours": 644.0
+      }
+    },
+    {
+      "sku": "Module-E04",
+      "category": "Module",
+      "profit_usd": 885000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 460.0,
+        "Assembly_Line_Hours": 778.0,
+        "Skilled_Labor_Hours": 955.0,
+        "Raw_Material_Budget_USD": 99.0,
+        "Energy_Consumption_kWh": 659.0,
+        "Warehouse_Space_SqFt": 511.0,
+        "Quality_Inspection_Hours": 423.0,
+        "Setup_Changeover_Hours": 469.0,
+        "Shipping_Capacity_Pallets": 54.0,
+        "Compliance_Hours": 413.0
+      }
+    },
+    {
+      "sku": "Assembly-E05",
+      "category": "Assembly",
+      "profit_usd": 907000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 543.0,
+        "Assembly_Line_Hours": 712.0,
+        "Skilled_Labor_Hours": 60.0,
+        "Raw_Material_Budget_USD": 186.0,
+        "Energy_Consumption_kWh": 889.0,
+        "Warehouse_Space_SqFt": 548.0,
+        "Quality_Inspection_Hours": 158.0,
+        "Setup_Changeover_Hours": 175.0,
+        "Shipping_Capacity_Pallets": 582.0,
+        "Compliance_Hours": 991.0
+      }
+    },
+    {
+      "sku": "Module-E09",
+      "category": "Module",
+      "profit_usd": 904000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 254.0,
+        "Assembly_Line_Hours": 591.0,
+        "Skilled_Labor_Hours": 673.0,
+        "Raw_Material_Budget_USD": 257.0,
+        "Energy_Consumption_kWh": 716.0,
+        "Warehouse_Space_SqFt": 996.0,
+        "Quality_Inspection_Hours": 438.0,
+        "Setup_Changeover_Hours": 366.0,
+        "Shipping_Capacity_Pallets": 88.0,
+        "Compliance_Hours": 646.0
+      }
+    },
+    {
+      "sku": "Assembly-E10",
+      "category": "Assembly",
+      "profit_usd": 1081000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 842.0,
+        "Assembly_Line_Hours": 219.0,
+        "Skilled_Labor_Hours": 731.0,
+        "Raw_Material_Budget_USD": 344.0,
+        "Energy_Consumption_kWh": 797.0,
+        "Warehouse_Space_SqFt": 553.0,
+        "Quality_Inspection_Hours": 622.0,
+        "Setup_Changeover_Hours": 417.0,
+        "Shipping_Capacity_Pallets": 779.0,
+        "Compliance_Hours": 735.0
+      }
+    },
+    {
+      "sku": "Module-E14",
+      "category": "Module",
+      "profit_usd": 943000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 116.0,
+        "Assembly_Line_Hours": 776.0,
+        "Skilled_Labor_Hours": 853.0,
+        "Raw_Material_Budget_USD": 297.0,
+        "Energy_Consumption_kWh": 600.0,
+        "Warehouse_Space_SqFt": 284.0,
+        "Quality_Inspection_Hours": 841.0,
+        "Setup_Changeover_Hours": 233.0,
+        "Shipping_Capacity_Pallets": 31.0,
+        "Compliance_Hours": 559.0
+      }
+    },
+    {
+      "sku": "Component-E18",
+      "category": "Component",
+      "profit_usd": 926000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 800.0,
+        "Assembly_Line_Hours": 498.0,
+        "Skilled_Labor_Hours": 372.0,
+        "Raw_Material_Budget_USD": 359.0,
+        "Energy_Consumption_kWh": 325.0,
+        "Warehouse_Space_SqFt": 605.0,
+        "Quality_Inspection_Hours": 743.0,
+        "Setup_Changeover_Hours": 833.0,
+        "Shipping_Capacity_Pallets": 696.0,
+        "Compliance_Hours": 238.0
+      }
+    },
+    {
+      "sku": "Module-E19",
+      "category": "Module",
+      "profit_usd": 784000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 403.0,
+        "Assembly_Line_Hours": 182.0,
+        "Skilled_Labor_Hours": 358.0,
+        "Raw_Material_Budget_USD": 415.0,
+        "Energy_Consumption_kWh": 147.0,
+        "Warehouse_Space_SqFt": 238.0,
+        "Quality_Inspection_Hours": 710.0,
+        "Setup_Changeover_Hours": 166.0,
+        "Shipping_Capacity_Pallets": 904.0,
+        "Compliance_Hours": 339.0
+      }
+    },
+    {
+      "sku": "Gadget-A02",
+      "category": "Gadget",
+      "profit_usd": 1145000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 511.0,
+        "Assembly_Line_Hours": 101.0,
+        "Skilled_Labor_Hours": 75.0,
+        "Raw_Material_Budget_USD": 973.0,
+        "Energy_Consumption_kWh": 529.0,
+        "Warehouse_Space_SqFt": 974.0,
+        "Quality_Inspection_Hours": 821.0,
+        "Setup_Changeover_Hours": 761.0,
+        "Shipping_Capacity_Pallets": 887.0,
+        "Compliance_Hours": 873.0
+      }
+    },
+    {
+      "sku": "Gadget-A07",
+      "category": "Gadget",
+      "profit_usd": 795000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 948.0,
+        "Assembly_Line_Hours": 184.0,
+        "Skilled_Labor_Hours": 84.0,
+        "Raw_Material_Budget_USD": 30.0,
+        "Energy_Consumption_kWh": 363.0,
+        "Warehouse_Space_SqFt": 288.0,
+        "Quality_Inspection_Hours": 44.0,
+        "Setup_Changeover_Hours": 766.0,
+        "Shipping_Capacity_Pallets": 211.0,
+        "Compliance_Hours": 577.0
+      }
+    },
+    {
+      "sku": "Assembly-A10",
+      "category": "Assembly",
+      "profit_usd": 785000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 301.0,
+        "Assembly_Line_Hours": 121.0,
+        "Skilled_Labor_Hours": 491.0,
+        "Raw_Material_Budget_USD": 277.0,
+        "Energy_Consumption_kWh": 481.0,
+        "Warehouse_Space_SqFt": 834.0,
+        "Quality_Inspection_Hours": 232.0,
+        "Setup_Changeover_Hours": 870.0,
+        "Shipping_Capacity_Pallets": 583.0,
+        "Compliance_Hours": 158.0
+      }
+    },
+    {
+      "sku": "Module-A14",
+      "category": "Module",
+      "profit_usd": 1000000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 483.0,
+        "Assembly_Line_Hours": 541.0,
+        "Skilled_Labor_Hours": 65.0,
+        "Raw_Material_Budget_USD": 209.0,
+        "Energy_Consumption_kWh": 651.0,
+        "Warehouse_Space_SqFt": 503.0,
+        "Quality_Inspection_Hours": 798.0,
+        "Setup_Changeover_Hours": 844.0,
+        "Shipping_Capacity_Pallets": 965.0,
+        "Compliance_Hours": 193.0
+      }
+    },
+    {
+      "sku": "Component-B03",
+      "category": "Component",
+      "profit_usd": 784000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 856.0,
+        "Assembly_Line_Hours": 96.0,
+        "Skilled_Labor_Hours": 781.0,
+        "Raw_Material_Budget_USD": 477.0,
+        "Energy_Consumption_kWh": 229.0,
+        "Warehouse_Space_SqFt": 171.0,
+        "Quality_Inspection_Hours": 126.0,
+        "Setup_Changeover_Hours": 273.0,
+        "Shipping_Capacity_Pallets": 766.0,
+        "Compliance_Hours": 713.0
+      }
+    },
+    {
+      "sku": "Widget-B06",
+      "category": "Widget",
+      "profit_usd": 865000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 92.0,
+        "Assembly_Line_Hours": 16.0,
+        "Skilled_Labor_Hours": 780.0,
+        "Raw_Material_Budget_USD": 33.0,
+        "Energy_Consumption_kWh": 891.0,
+        "Warehouse_Space_SqFt": 453.0,
+        "Quality_Inspection_Hours": 108.0,
+        "Setup_Changeover_Hours": 577.0,
+        "Shipping_Capacity_Pallets": 539.0,
+        "Compliance_Hours": 186.0
+      }
+    },
+    {
+      "sku": "Component-B13",
+      "category": "Component",
+      "profit_usd": 645000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 400.0,
+        "Assembly_Line_Hours": 303.0,
+        "Skilled_Labor_Hours": 585.0,
+        "Raw_Material_Budget_USD": 192.0,
+        "Energy_Consumption_kWh": 850.0,
+        "Warehouse_Space_SqFt": 206.0,
+        "Quality_Inspection_Hours": 153.0,
+        "Setup_Changeover_Hours": 610.0,
+        "Shipping_Capacity_Pallets": 355.0,
+        "Compliance_Hours": 26.0
+      }
+    },
+    {
+      "sku": "Gadget-B17",
+      "category": "Gadget",
+      "profit_usd": 969000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 898.0,
+        "Assembly_Line_Hours": 591.0,
+        "Skilled_Labor_Hours": 204.0,
+        "Raw_Material_Budget_USD": 747.0,
+        "Energy_Consumption_kWh": 946.0,
+        "Warehouse_Space_SqFt": 153.0,
+        "Quality_Inspection_Hours": 403.0,
+        "Setup_Changeover_Hours": 114.0,
+        "Shipping_Capacity_Pallets": 777.0,
+        "Compliance_Hours": 204.0
+      }
+    },
+    {
+      "sku": "Assembly-C10",
+      "category": "Assembly",
+      "profit_usd": 714000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 562.0,
+        "Assembly_Line_Hours": 285.0,
+        "Skilled_Labor_Hours": 1.0,
+        "Raw_Material_Budget_USD": 921.0,
+        "Energy_Consumption_kWh": 23.0,
+        "Warehouse_Space_SqFt": 757.0,
+        "Quality_Inspection_Hours": 765.0,
+        "Setup_Changeover_Hours": 226.0,
+        "Shipping_Capacity_Pallets": 358.0,
+        "Compliance_Hours": 46.0
+      }
+    }
+  ],
+  "resources": [
+    {
+      "name": "CNC_Machine_Hours",
+      "capacity": 31985.0,
+      "used": 31965.0,
+      "unit": "hours",
+      "utilization_percent": 99.93747068938565
+    },
+    {
+      "name": "Assembly_Line_Hours",
+      "capacity": 30902.0,
+      "used": 30739.0,
+      "unit": "hours",
+      "utilization_percent": 99.47252605009385
+    },
+    {
+      "name": "Skilled_Labor_Hours",
+      "capacity": 31096.0,
+      "used": 30872.0,
+      "unit": "hours",
+      "utilization_percent": 99.27965011577051
+    },
+    {
+      "name": "Raw_Material_Budget_USD",
+      "capacity": 31684.0,
+      "used": 31633.0,
+      "unit": "USD",
+      "utilization_percent": 99.83903547531877
+    },
+    {
+      "name": "Energy_Consumption_kWh",
+      "capacity": 31802.0,
+      "used": 31697.0,
+      "unit": "kWh",
+      "utilization_percent": 99.66983208603233
+    },
+    {
+      "name": "Warehouse_Space_SqFt",
+      "capacity": 31439.0,
+      "used": 31429.0,
+      "unit": "sq_ft",
+      "utilization_percent": 99.96819237253092
+    },
+    {
+      "name": "Quality_Inspection_Hours",
+      "capacity": 29603.0,
+      "used": 29355.0,
+      "unit": "hours",
+      "utilization_percent": 99.16224706955377
+    },
+    {
+      "name": "Setup_Changeover_Hours",
+      "capacity": 30621.0,
+      "used": 30474.0,
+      "unit": "hours",
+      "utilization_percent": 99.5199372979328
+    },
+    {
+      "name": "Shipping_Capacity_Pallets",
+      "capacity": 32059.0,
+      "used": 32050.0,
+      "unit": "pallets",
+      "utilization_percent": 99.97192676003618
+    },
+    {
+      "name": "Compliance_Hours",
+      "capacity": 31345.0,
+      "used": 30985.0,
+      "unit": "hours",
+      "utilization_percent": 98.85149146594352
+    }
+  ]
+}
