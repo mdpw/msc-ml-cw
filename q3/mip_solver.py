@@ -282,11 +282,17 @@ if __name__ == "__main__":
     print(" "*20 + "Manufacturing Resource Allocation")
     print("="*70)
     
-    # Load data
-    print("\nLoading problem instance...")
+    # Load data from .npz file using ManufacturingDataLoader
+    print("\nLoading problem instance from saved file...")
     loader = ManufacturingDataLoader()
-    instances = loader.download_and_convert("mknapcb5.txt")
-    instance = instances[0]
+    
+    try:
+        instance = loader.load_manufacturing_instance('manufacturing_problem_1.npz')
+        print("Successfully loaded from manufacturing_problem_1.npz")
+    except FileNotFoundError:
+        print("Error: manufacturing_problem_1.npz not found!")
+        print("Please run manufacturing_data_loader.py first to create the data file.")
+        exit(1)
     
     print("\n" + "-"*70)
     print("PROBLEM INSTANCE DETAILS:")

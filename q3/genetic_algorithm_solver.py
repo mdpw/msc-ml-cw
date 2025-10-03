@@ -10,45 +10,6 @@ import json
 import os
 
 # -----------------------------
-# GA Components Documentation
-# -----------------------------
-def print_ga_components():
-    """Document GA components for assignment submission."""
-    print("\n" + "="*70)
-    print(" "*20 + "GENETIC ALGORITHM COMPONENTS")
-    print("="*70)
-    print("\n1. CHROMOSOME REPRESENTATION:")
-    print("   - Binary encoding: 1 = produce product, 0 = don't produce")
-    print("   - Length = number of products")
-    print("   - Example: [1, 0, 1, 1, 0] means produce products 1, 3, and 4")
-    
-    print("\n2. FITNESS FUNCTION:")
-    print("   - Objective: Maximize total profit")
-    print("   - Formula: Fitness = Σ(selected_products × profit_margins)")
-    print("   - Higher fitness = better solution")
-    
-    print("\n3. SELECTION METHOD:")
-    print("   - Type: Tournament selection (k=3)")
-    print("   - Process: Randomly select k individuals, choose the best")
-    print("   - Ensures better solutions have higher selection probability")
-    
-    print("\n4. CROSSOVER OPERATOR:")
-    print("   - Type: Single-point crossover")
-    print("   - Process: Randomly select crossover point, exchange segments")
-    print("   - Creates offspring by combining parent solutions")
-    
-    print("\n5. MUTATION OPERATOR:")
-    print("   - Type: Bit-flip mutation")
-    print("   - Process: Randomly flip bits based on mutation rate")
-    print("   - Maintains genetic diversity in population")
-    
-    print("\n6. CONSTRAINT HANDLING:")
-    print("   - Method: Repair mechanism")
-    print("   - Process: Remove products violating resource capacity constraints")
-    print("   - Ensures all solutions remain feasible")
-    print("="*70 + "\n")
-
-# -----------------------------
 # Genetic Algorithm Components
 # -----------------------------
 def initialize_population(pop_size, n_products):
@@ -402,15 +363,18 @@ if __name__ == "__main__":
     print(" "*15 + "GENETIC ALGORITHM OPTIMIZATION")
     print(" "*20 + "Manufacturing Resource Allocation")
     print("="*70)
-    
-    # Print GA components documentation
-    print_ga_components()
-    
-    # Load data
-    print("Loading problem instance...")
+        
+    # Load data from .npz file using ManufacturingDataLoader
+    print("\nLoading problem instance from saved file...")
     loader = ManufacturingDataLoader()
-    instances = loader.download_and_convert("mknapcb5.txt")
-    instance = instances[0]
+    
+    try:
+        instance = loader.load_manufacturing_instance('manufacturing_problem_1.npz')
+        print("Successfully loaded from manufacturing_problem_1.npz")
+    except FileNotFoundError:
+        print("Error: manufacturing_problem_1.npz not found!")
+        print("Please run manufacturing_data_loader.py first to create the data file.")
+        exit(1)
     
     print("\n" + "-"*70)
     print("PROBLEM INSTANCE DETAILS:")

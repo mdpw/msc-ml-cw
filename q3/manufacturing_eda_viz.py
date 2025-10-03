@@ -35,20 +35,19 @@ class ManufacturingVisualization:
         # 1. Profit distribution
         self.plot_profit_distribution(save_figs)
         
-# 6. Resource capacity vs demand
+        # 2. Resource capacity vs demand
         self.plot_capacity_analysis(save_figs)
 
-        # 4. Correlation heatmap
+        # 3. Correlation heatmap
         self.plot_correlation_heatmap(save_figs)
         
-            # 5. Efficiency analysis
+        # 4. Efficiency analysis
         self.plot_efficiency_analysis(save_figs)
     
+        # 5. Efficiency analysis
         self.create_summary_dashboard(save=True)
         
-
-        
-        print("✅ All visualizations complete!")
+        print("All visualizations complete!")
         plt.show()
     
     def plot_profit_distribution(self, save=False):
@@ -304,16 +303,15 @@ class ManufacturingVisualization:
         ax1.axis('off')
         
         overview_text = f"""
-PROBLEM OVERVIEW
-━━━━━━━━━━━━━━━━━━━━━━
-Company: {self.instance['company_name']}
-Period: {self.instance['planning_period']}
+        PROBLEM OVERVIEW
+        Company: {self.instance['company_name']}
+        Period: {self.instance['planning_period']}
 
-Products: {self.instance['n_products']}
-Resources: {self.instance['n_resources']}
-Solution Space: {2**self.instance['n_products']:.2e}
+        Products: {self.instance['n_products']}
+        Resources: {self.instance['n_resources']}
+        Solution Space: {2**self.instance['n_products']:.2e}
 
-Optimal Value: ${self.instance['optimal_value']*1000:,.0f}
+        Optimal Value: ${self.instance['optimal_value']*1000:,.0f}
         """
         ax1.text(0.1, 0.9, overview_text, fontsize=11, verticalalignment='top',
                 family='monospace', bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.5))
@@ -375,20 +373,19 @@ Optimal Value: ${self.instance['optimal_value']*1000:,.0f}
         bottleneck_util = utilizations[bottleneck_idx]
         
         insights_text = f"""
-KEY INSIGHTS
-━━━━━━━━━━━━━━━━━━━━━━
-Profit Range:
-  ${profit_data.min():,.0f} - ${profit_data.max():,.0f}
-  
-Average Profit:
-  ${profit_data.mean():,.0f}
-  
-Bottleneck Resource:
-  {bottleneck_name}
-  ({bottleneck_util:.0f}% utilization)
-  
-Problem Complexity:
-  NP-Hard (requires heuristics)
+        KEY INSIGHTS
+        Profit Range:
+        ${profit_data.min():,.0f} - ${profit_data.max():,.0f}
+        
+        Average Profit:
+        ${profit_data.mean():,.0f}
+        
+        Bottleneck Resource:
+        {bottleneck_name}
+        ({bottleneck_util:.0f}% utilization)
+        
+        Problem Complexity:
+        NP-Hard (requires heuristics)
         """
         ax6.text(0.1, 0.9, insights_text, fontsize=10, verticalalignment='top',
                 family='monospace', bbox=dict(boxstyle='round', facecolor='lightyellow', alpha=0.5))
@@ -412,10 +409,6 @@ Problem Complexity:
             plt.savefig('eda_figures/09_summary_dashboard.png', dpi=300, bbox_inches='tight')
 
 
-# =============================================================================
-# USAGE EXAMPLE
-# =============================================================================
-
 if __name__ == "__main__": 
     from manufacturing_eda import ManufacturingEDA
     
@@ -437,5 +430,5 @@ if __name__ == "__main__":
     # viz.plot_capacity_analysis(save=True)
     # viz.create_summary_dashboard(save=True)
     
-    print("\n✅ All visualizations generated!")
-    print("📁 Figures saved in: ./eda_figures/")
+    print("\nAll visualizations generated!")
+    print("Figures saved in: ./eda_figures/")

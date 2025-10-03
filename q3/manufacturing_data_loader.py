@@ -362,8 +362,3 @@ if __name__ == "__main__":
         print(f"Files Created:")
         print(f"  1. manufacturing_problem_1.npz (for Python/algorithms)")
         print(f"  2. manufacturing_problem_1.json (for human reading)")
-        print(f"\nNext Steps:")
-        print(f"  1. Load data: loader.load_manufacturing_instance('manufacturing_problem_1')")
-        print(f"  2. Implement Genetic Algorithm")
-        print(f"  3. Implement MIP solver")
-        print(f"  4. Compare results")
