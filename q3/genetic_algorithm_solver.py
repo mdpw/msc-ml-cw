@@ -209,7 +209,7 @@ def detailed_constraint_report(solution, instance):
         feasible = usage <= capacities[r]
         utilization = (usage / capacities[r]) * 100 if capacities[r] > 0 else 0
         
-        status = "✓ SATISFIED" if feasible else "✗ VIOLATED"
+        status = "SATISFIED" if feasible else "✗ VIOLATED"
         if not feasible:
             all_satisfied = False
         
@@ -270,7 +270,7 @@ def visualize_convergence(convergence, best_params=None, save_path='ga_results/g
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.show()
     
-    print(f"\n✓ Convergence plot saved to: {save_path}")
+    print(f"\nConvergence plot saved to: {save_path}")
 
 # -----------------------------
 # Solution Evaluation (for compatibility)
@@ -353,7 +353,7 @@ def save_ga_solution(instance, solution, profit, best_params=None,
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
 
-    print(f"\n✓ GA solution saved to: {filepath}")
+    print(f"\nGA solution saved to: {filepath}")
 
 # -----------------------------
 # Main Execution (Standalone Mode)
@@ -440,8 +440,8 @@ if __name__ == "__main__":
     print("\n" + "="*70)
     print(" "*25 + "OPTIMIZATION COMPLETE!")
     print("="*70)
-    print(f"\n✓ Best Profit Achieved: ${total_profit:,.2f}")
-    print(f"✓ Constraints Satisfied: {'YES' if constraints_satisfied else 'NO'}")
-    print(f"✓ Products Selected: {int(np.sum(best_solution))} out of {instance['n_products']}")
-    print(f"✓ Results saved in 'ga_results/' directory")
+    print(f"\nBest Profit Achieved: ${total_profit:,.2f}")
+    print(f"Constraints Satisfied: {'YES' if constraints_satisfied else 'NO'}")
+    print(f"Products Selected: {int(np.sum(best_solution))} out of {instance['n_products']}")
+    print(f"Results saved in 'ga_results/' directory")
     print("\n" + "="*70 + "\n")
