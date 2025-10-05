@@ -5,9 +5,9 @@ Time series forecasting for energy load prediction using Prophet, LSTM, and Expo
 ## Quick Start
 
 # 1. Setup
-python -m venv energy-env
-energy-env\Scripts\activate
-pip install -r requirements.txt
+python -m venv energy-env </br>
+energy-env\Scripts\activate </br>
+pip install -r requirements.txt </br>
 
 ### 2. Run Complete Pipeline
 # Step 1: EDA and Preprocessing
