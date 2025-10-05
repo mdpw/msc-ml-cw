@@ -1,10 +1,23 @@
-# Python cache
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 *.pyc
 
-# Virtual environment
-**/.venv/
-.env
+# Virtual Environments
+energy-env/
+venv/
+env/
+ENV/
+*.venv
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
