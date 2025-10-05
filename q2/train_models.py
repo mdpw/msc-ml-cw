@@ -1,4 +1,3 @@
-
 """
 Main script to train all models and evaluate performance.
 Trains: Prophet, Chronos, LSTM
@@ -15,6 +14,7 @@ warnings.filterwarnings('ignore')
 from prophet_model import EnergyProphetModel
 from chronos_model import EnergyChronosModel
 from lstm_model import EnergyLSTMModel
+from sarimax_model import EnergySARIMAXModel
 from evaluator import ModelEvaluator
 
 
@@ -105,7 +105,29 @@ def train_chronos(config, train_df, test_df):
     return forecast['yhat'].values, chronos_model
 
 
-def train_lstm(config, train_df, test_df):
+def train_sarimax(config, train_df, test_df):
+    """Train and evaluate SARIMAX model"""
+    print("\n" + "="*80)
+    print("TRAINING SARIMAX MODEL (NOVEL/ADVANCED)")
+    print("="*80)
+    
+    target_col = config['target']['column']
+    
+    # Prepare data (SARIMAX also uses Prophet format)
+    train_sarimax, test_sarimax = prepare_prophet_data(train_df, test_df, target_col)
+    
+    # Initialize and train model
+    sarimax_model = EnergySARIMAXModel(config)
+    sarimax_model.fit_baseline_model(train_sarimax)
+    
+    # Generate predictions
+    forecast = sarimax_model.predict(test_sarimax)
+    
+    # Save model
+    os.makedirs('models', exist_ok=True)
+    sarimax_model.save_model('models/sarimax_model.pkl')
+    
+    return forecast['yhat'].values, sarimax_model
     """Train and evaluate LSTM model"""
     print("\n" + "="*80)
     print("TRAINING LSTM MODEL")
@@ -242,7 +264,38 @@ def main():
         print(f"✗ LSTM model failed: {str(e)}")
     
     # ============================================================
-    # 4. COMPARISON & VISUALIZATION
+    # 4. TRAIN SARIMAX (NOVEL/ADVANCED MODEL)
+    # ============================================================
+    try:
+        y_pred_sarimax, sarimax_model = train_sarimax(config, train_df, test_df)
+        
+        # Align predictions
+        if len(y_pred_sarimax) != len(y_true):
+            min_len = min(len(y_pred_sarimax), len(y_true))
+            y_pred_sarimax = y_pred_sarimax[:min_len]
+            y_true_sarimax = y_true[:min_len]
+        else:
+            y_true_sarimax = y_true
+        
+        # Evaluate
+        metrics_sarimax = evaluator.calculate_metrics(y_true_sarimax, y_pred_sarimax, "SARIMAX")
+        evaluator.print_metrics("SARIMAX", metrics_sarimax)
+        
+        # Plot residuals
+        evaluator.plot_residuals(y_true_sarimax, y_pred_sarimax, "SARIMAX",
+                                save_path='plots/sarimax_residuals.png')
+        
+        # Store predictions
+        all_predictions['SARIMAX'] = pd.Series(y_pred_sarimax,
+                                              index=test_df.index[:len(y_pred_sarimax)])
+        
+        print("✓ SARIMAX model completed successfully!")
+        
+    except Exception as e:
+        print(f"✗ SARIMAX model failed: {str(e)}")
+    
+    # ============================================================
+    # 5. COMPARISON & VISUALIZATION
     # ============================================================
     print("\n" + "="*80)
     print("  MODEL COMPARISON & RESULTS")

@@ -65,6 +65,14 @@ chronos:
   context_length: 512
   prediction_length: 30
 
+# SARIMAX Model Configuration (Novel/Advanced Model)
+sarimax:
+  order: [1, 1, 1]              # (p, d, q) - AR order, differencing, MA order
+  seasonal_order: [1, 1, 1, 7]  # (P, D, Q, s) - Seasonal AR, diff, MA, period (7=weekly)
+  # Alternative configurations to try:
+  # seasonal_order: [1, 1, 1, 30]  # Monthly seasonality
+  # seasonal_order: [1, 1, 1, 365] # Yearly seasonality
+
 # Feature engineering settings
 features:
   lag_features: [1, 7, 30]  # Previous 1 day, 1 week, 1 month
