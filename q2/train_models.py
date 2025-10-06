@@ -1,6 +1,6 @@
 """
 Main script to train all models and evaluate performance.
-Trains: Prophet, Chronos, LSTM
+Trains: Prophet, Chronos, LSTM, SARIMAX
 """
 
 import pandas as pd
@@ -38,19 +38,24 @@ def load_processed_data():
 
 
 def prepare_prophet_data(train_df, test_df, target_col):
-    """Prepare data for Prophet (needs 'ds' and 'y' columns)"""
-    print("\nPreparing data for Prophet...")
+    """Prepare data for Prophet and SARIMAX (needs 'ds' and 'y' columns)"""
+    print("\nPreparing data for Prophet/SARIMAX...")
+    
+    # Get the actual index name (should be 'time' based on your data)
+    index_name = train_df.index.name if train_df.index.name else 'time'
     
     # Prophet requires specific column names
     train_prophet = train_df.reset_index().rename(columns={
-        train_df.index.name or 'index': 'ds',
+        index_name: 'ds',
         target_col: 'y'
     })
     
     test_prophet = test_df.reset_index().rename(columns={
-        test_df.index.name or 'index': 'ds',
+        index_name: 'ds',
         target_col: 'y'
     })
+    
+    print(f"Prophet data columns: {train_prophet.columns.tolist()}")
     
     return train_prophet, test_prophet
 
@@ -105,29 +110,7 @@ def train_chronos(config, train_df, test_df):
     return forecast['yhat'].values, chronos_model
 
 
-def train_sarimax(config, train_df, test_df):
-    """Train and evaluate SARIMAX model"""
-    print("\n" + "="*80)
-    print("TRAINING SARIMAX MODEL (NOVEL/ADVANCED)")
-    print("="*80)
-    
-    target_col = config['target']['column']
-    
-    # Prepare data (SARIMAX also uses Prophet format)
-    train_sarimax, test_sarimax = prepare_prophet_data(train_df, test_df, target_col)
-    
-    # Initialize and train model
-    sarimax_model = EnergySARIMAXModel(config)
-    sarimax_model.fit_baseline_model(train_sarimax)
-    
-    # Generate predictions
-    forecast = sarimax_model.predict(test_sarimax)
-    
-    # Save model
-    os.makedirs('models', exist_ok=True)
-    sarimax_model.save_model('models/sarimax_model.pkl')
-    
-    return forecast['yhat'].values, sarimax_model
+def train_lstm(config, train_df, test_df):
     """Train and evaluate LSTM model"""
     print("\n" + "="*80)
     print("TRAINING LSTM MODEL")
@@ -145,6 +128,42 @@ def train_sarimax(config, train_df, test_df):
     lstm_model.save_model('models/lstm_model.pkl')
     
     return forecast['yhat'].values, lstm_model
+
+
+def train_sarimax(config, train_df, test_df):
+    """Train and evaluate SARIMAX model"""
+    print("\n" + "="*80)
+    print("TRAINING SARIMAX MODEL (NOVEL/ADVANCED)")
+    print("="*80)
+    
+    target_col = config['target']['column']
+    
+    # Prepare data (SARIMAX uses Prophet format)
+    train_sarimax, test_sarimax = prepare_prophet_data(train_df, test_df, target_col)
+    
+    # Debug: Check data structure
+    print(f"\nDebug - Train data shape: {train_sarimax.shape}")
+    print(f"Debug - Test data shape: {test_sarimax.shape}")
+    print(f"Debug - Columns: {train_sarimax.columns.tolist()}")
+    
+    # Initialize and train model
+    sarimax_model = EnergySARIMAXModel(config)
+    sarimax_model.fit_baseline_model(train_sarimax)
+    
+    # Generate predictions
+    forecast = sarimax_model.predict(test_sarimax)
+    
+    # Save model
+    os.makedirs('models', exist_ok=True)
+    sarimax_model.save_model('models/sarimax_model.pkl')
+    
+    # Extract predictions safely
+    if isinstance(forecast['yhat'], pd.Series):
+        predictions = forecast['yhat'].values
+    else:
+        predictions = np.array(forecast['yhat'])
+    
+    return predictions, sarimax_model
 
 
 def main():
@@ -180,7 +199,7 @@ def main():
     try:
         y_pred_prophet, prophet_model = train_prophet(config, train_df, test_df)
         
-        # Align predictions with test data (Prophet might return different length)
+        # Align predictions with test data
         if len(y_pred_prophet) != len(y_true):
             min_len = min(len(y_pred_prophet), len(y_true))
             y_pred_prophet = y_pred_prophet[:min_len]
@@ -204,6 +223,8 @@ def main():
         
     except Exception as e:
         print(f"✗ Prophet model failed: {str(e)}")
+        import traceback
+        traceback.print_exc()
     
     # ============================================================
     # 2. TRAIN CHRONOS
@@ -235,6 +256,8 @@ def main():
         
     except Exception as e:
         print(f"✗ Chronos model failed: {str(e)}")
+        import traceback
+        traceback.print_exc()
     
     # ============================================================
     # 3. TRAIN LSTM
@@ -262,6 +285,8 @@ def main():
         
     except Exception as e:
         print(f"✗ LSTM model failed: {str(e)}")
+        import traceback
+        traceback.print_exc()
     
     # ============================================================
     # 4. TRAIN SARIMAX (NOVEL/ADVANCED MODEL)
@@ -293,6 +318,8 @@ def main():
         
     except Exception as e:
         print(f"✗ SARIMAX model failed: {str(e)}")
+        import traceback
+        traceback.print_exc()
     
     # ============================================================
     # 5. COMPARISON & VISUALIZATION
@@ -332,20 +359,21 @@ def main():
     evaluator.generate_report(save_path='results/evaluation_report.txt')
     
     # ============================================================
-    # 5. BEST MODEL SUMMARY
+    # 6. BEST MODEL SUMMARY
     # ============================================================
     print("\n" + "="*80)
     print("  FINAL SUMMARY")
     print("="*80)
     
-    best_model = comparison_df.index[0]
-    best_metrics = evaluator.results[best_model]
-    
-    print(f"\n🏆 BEST MODEL: {best_model}")
-    print(f"   MAE:  {best_metrics['MAE']:,.2f}")
-    print(f"   RMSE: {best_metrics['RMSE']:,.2f}")
-    print(f"   MAPE: {best_metrics['MAPE']:.2f}%")
-    print(f"   R²:   {best_metrics['R2']:.4f}")
+    if len(evaluator.results) > 0:
+        best_model = comparison_df.index[0]
+        best_metrics = evaluator.results[best_model]
+        
+        print(f"\n🏆 BEST MODEL: {best_model}")
+        print(f"   MAE:  {best_metrics['MAE']:,.2f}")
+        print(f"   RMSE: {best_metrics['RMSE']:,.2f}")
+        print(f"   MAPE: {best_metrics['MAPE']:.2f}%")
+        print(f"   R²:   {best_metrics['R2']:.4f}")
     
     print("\n" + "="*80)
     print("  ALL TASKS COMPLETED!")

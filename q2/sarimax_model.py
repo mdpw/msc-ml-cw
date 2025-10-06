@@ -52,7 +52,10 @@ class EnergySARIMAXModel:
         print(f"Seasonal Order (P,D,Q,s): {self.seasonal_order}")
         
         # Extract target variable
-        y_train = train_df['y'].values
+        if isinstance(train_df['y'], pd.Series):
+            y_train = train_df['y'].values
+        else:
+            y_train = np.array(train_df['y'])
         
         # Extract exogenous variables (weather features)
         exog_cols = [col for col in self.exog_features if col in train_df.columns]
@@ -139,12 +142,32 @@ class EnergySARIMAXModel:
         
         forecast_ci = forecast_df_full.conf_int()
         
+        # Handle ds column - convert to array safely
+        if isinstance(test_df['ds'], pd.Series):
+            ds_values = test_df['ds'].values
+        else:
+            ds_values = np.array(test_df['ds'])
+        
+        # Handle forecast_result - convert to array safely
+        if isinstance(forecast_result, pd.Series):
+            yhat_values = forecast_result.values
+        else:
+            yhat_values = np.array(forecast_result)
+        
+        # Handle confidence intervals
+        if isinstance(forecast_ci, pd.DataFrame):
+            lower_values = forecast_ci.iloc[:, 0].values
+            upper_values = forecast_ci.iloc[:, 1].values
+        else:
+            lower_values = np.array(forecast_ci[:, 0])
+            upper_values = np.array(forecast_ci[:, 1])
+        
         # Create forecast dataframe
         forecast_df = pd.DataFrame({
-            'ds': test_df['ds'].values,
-            'yhat': forecast_result.values,
-            'yhat_lower': forecast_ci.iloc[:, 0].values,
-            'yhat_upper': forecast_ci.iloc[:, 1].values
+            'ds': ds_values,
+            'yhat': yhat_values,
+            'yhat_lower': lower_values,
+            'yhat_upper': upper_values
         })
         
         print(f"Generated {len(forecast_df)} predictions")
