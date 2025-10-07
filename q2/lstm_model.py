@@ -1,7 +1,3 @@
-"""
-LSTM model implementation for energy load forecasting.
-"""
-
 import pandas as pd
 import numpy as np
 import tensorflow as tf
@@ -18,9 +14,6 @@ warnings.filterwarnings('ignore')
 
 
 class EnergyLSTMModel:
-    """
-    LSTM model wrapper for energy load forecasting.
-    """
     
     def __init__(self, config: Dict[str, Any]):
         self.config = config
@@ -196,11 +189,7 @@ class EnergyLSTMModel:
         print(f"Generated {len(predictions)} predictions")
         return forecast_df
     
-    def get_feature_importance(self) -> pd.DataFrame:
-        """
-        LSTM doesn't provide direct feature importance.
-        Return empty dataframe for compatibility.
-        """
+    def get_feature_importance(self) -> pd.DataFrame:        
         print("Note: LSTM doesn't provide traditional feature importance")
         return pd.DataFrame()
     
@@ -249,45 +238,3 @@ class EnergyLSTMModel:
         self.is_fitted = model_data['is_fitted']
         
         print(f"Model loaded from {filepath}")
-
-
-if __name__ == "__main__":
-    # Test LSTM model
-    import yaml
-    
-    # Sample config
-    config = {
-        'target': {'column': 'total_load_actual'},
-        'lstm': {
-            'sequence_length': 7,
-            'epochs': 50,
-            'batch_size': 32,
-            'units': 50,
-            'dropout': 0.2,
-            'learning_rate': 0.001
-        }
-    }
-    
-    # Create sample data
-    dates = pd.date_range(start='2018-01-01', periods=200, freq='D')
-    data = pd.DataFrame({
-        'total_load_actual': np.random.normal(25000, 5000, 200),
-        'temp': np.random.normal(15, 5, 200),
-        'humidity': np.random.normal(70, 10, 200),
-        'wind_speed': np.random.normal(10, 3, 200)
-    }, index=dates)
-    
-    print("Testing LSTM model...")
-    
-    # Split data
-    train_data = data[:150]
-    test_data = data[150:]
-    
-    # Test model
-    model = EnergyLSTMModel(config)
-    model.fit_baseline_model(train_data)
-    
-    # Generate forecast
-    forecast = model.predict(test_data)
-    print("\nForecast sample:")
-    print(forecast.head())

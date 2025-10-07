@@ -1,7 +1,3 @@
-"""
-Facebook Prophet model implementation for energy load forecasting.
-"""
-
 import pandas as pd
 import numpy as np
 from prophet import Prophet
@@ -22,10 +18,7 @@ warnings.filterwarnings('ignore')
 
 
 class EnergyProphetModel:
-    """
-    Facebook Prophet model wrapper for energy load forecasting.
-    Includes baseline model, hyperparameter tuning, and evaluation.
-    """
+
     
     def __init__(self, config: Dict[str, Any]):
         self.config = config
@@ -141,12 +134,13 @@ class EnergyProphetModel:
         print("Baseline model fitted successfully!")
         return model
     
-    def predict(self, test_df: pd.DataFrame) -> pd.DataFrame:
+    def predict(self, test_df: pd.DataFrame, horizon_days: int = None) -> pd.DataFrame:
         """
         Generate predictions using the fitted model.
         
         Args:
             test_df: Test data
+            horizon_days: Optional forecast horizon (if None, uses test_df length)
             
         Returns:
             pd.DataFrame: Predictions with confidence intervals
@@ -154,12 +148,17 @@ class EnergyProphetModel:
         if not self.is_fitted:
             raise ValueError("Model must be fitted before prediction")
         
-        print("Generating predictions...")
+        print(f"Generating predictions for {horizon_days if horizon_days else len(test_df)} days...")
         
-        # Create future dataframe
-        future_df = test_df[['ds'] + [col for col in test_df.columns if col != 'y']].copy()
-        future_df = test_df.drop(columns=['y']).copy()
-
+        # Create future dataframe - handle whether 'y' column exists or not
+        if horizon_days:
+            # Generate predictions for specific horizon
+            cols_to_keep = [col for col in test_df.columns if col not in ['y']]
+            future_df = test_df.iloc[:horizon_days][cols_to_keep].copy()
+        else:
+            # Remove 'y' column if it exists
+            cols_to_keep = [col for col in test_df.columns if col != 'y']
+            future_df = test_df[cols_to_keep].copy()
         
         # Generate forecast
         forecast = self.model.predict(future_df)
@@ -371,38 +370,3 @@ class EnergyProphetModel:
         else:
             print("No regressor coefficients available")
             return pd.DataFrame()
-
-
-if __name__ == "__main__":
-    # Test the Prophet model
-    import yaml
-    import sys
-    sys.path.append('../data')
-    from data_loader import DataLoader
-    from preprocessor import ProphetPreprocessor
-    
-    # Load configuration
-    with open('../../config/config.yaml', 'r') as f:
-        config = yaml.safe_load(f)
-    
-    # Load and preprocess data
-    loader = DataLoader(config)
-    data = loader.load_and_merge_data()
-    
-    preprocessor = ProphetPreprocessor(config)
-    train_df, test_df = preprocessor.prepare_data_for_prophet(data)
-    
-    # Test baseline model
-    prophet_model = EnergyProphetModel(config)
-    
-    print("Testing baseline model...")
-    model = prophet_model.fit_baseline_model(train_df)
-    forecast = prophet_model.predict(test_df)
-    
-    print("\nForecast sample:")
-    print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head())
-    
-    # Test feature importance
-    importance = prophet_model.get_feature_importance()
-    print("\nFeature importance:")
-    print(importance)

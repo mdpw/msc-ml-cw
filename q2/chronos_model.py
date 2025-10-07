@@ -1,7 +1,3 @@
-"""
-Chronos model implementation for energy forecasting.
-"""
-
 from chronos import ChronosPipeline
 import pandas as pd
 import numpy as np
@@ -11,7 +7,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class EnergyChronosModel:
-    """Chronos model wrapper for energy load forecasting."""
     
     def __init__(self, config: Dict[str, Any]):
         self.config = config
@@ -22,7 +17,8 @@ class EnergyChronosModel:
         # Initialize Chronos pipeline
         # Available models: "amazon/chronos-t5-tiny", "amazon/chronos-t5-mini", 
         # "amazon/chronos-t5-small", "amazon/chronos-t5-base", "amazon/chronos-t5-large"
-        model_name = config.get('chronos', {}).get('model_name', 'amazon/chronos-t5-small')
+        chronos_config = config['chronos']
+        model_name = chronos_config['model_name'] 
         
         print(f"Initializing Chronos model: {model_name}")
         self.pipeline = ChronosPipeline.from_pretrained(
@@ -88,10 +84,6 @@ class EnergyChronosModel:
         return forecast_df
     
     def get_feature_importance(self) -> pd.DataFrame:
-        """
-        Chronos doesn't provide feature importance like Prophet.
-        Return empty dataframe for compatibility.
-        """
         print("Note: Chronos doesn't provide feature importance analysis")
         return pd.DataFrame()
     
@@ -126,36 +118,3 @@ class EnergyChronosModel:
         self.is_fitted = model_state['is_fitted']
         
         print(f"Model state loaded from {path}")
-
-
-if __name__ == "__main__":
-    # Test Chronos model
-    import yaml
-    
-    # Sample configcd
-    config = {
-        'chronos': {
-            'model_name': 'amazon/chronos-t5-tiny'  # Use tiny for faster testing
-        }
-    }
-    
-    # Create sample data
-    dates = pd.date_range(start='2018-01-01', periods=100, freq='D')
-    data = pd.DataFrame({
-        'ds': dates,
-        'y': np.random.normal(25000, 5000, 100)
-    })
-    
-    print("Testing Chronos model...")
-    
-    # Test model
-    model = EnergyChronosModel(config)
-    model.fit_baseline_model(data)
-    
-    # Generate forecast
-    future_dates = pd.date_range(start='2018-04-11', periods=30, freq='D')
-    future_df = pd.DataFrame({'ds': future_dates})
-    
-    forecast = model.predict(future_df)
-    print("\nForecast sample:")
-    print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head())

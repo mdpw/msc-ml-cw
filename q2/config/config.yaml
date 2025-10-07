@@ -1,5 +1,11 @@
 # Configuration file for Energy Load Forecasting Project
 
+# Forecasting Configuration
+forecasting:
+  horizon: 30  # Number of days to forecast ahead
+  target: 'total_load_actual'
+  description: 'Daily energy load forecasting for next 30 days'
+
 data:
   raw_energy_path: 'data/raw/energy_dataset.csv'
   raw_weather_path: 'data/raw/weather_features.csv'
@@ -67,7 +73,7 @@ chronos:
 
 # SARIMAX Model Configuration (Novel/Advanced Model)
 sarimax:
-  order: [1, 1, 1]              # (p, d, q) - AR order, differencing, MA order
+  order: [2, 1, 2]              # (p, d, q) - AR order, differencing, MA order
   seasonal_order: [1, 1, 1, 7]  # (P, D, Q, s) - Seasonal AR, diff, MA, period (7=weekly)
   # Alternative configurations to try:
   # seasonal_order: [1, 1, 1, 30]  # Monthly seasonality

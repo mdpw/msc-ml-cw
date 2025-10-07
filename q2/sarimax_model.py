@@ -1,8 +1,3 @@
-"""
-SARIMAX model implementation for energy load forecasting.
-SARIMAX = Seasonal AutoRegressive Integrated Moving Average with eXogenous regressors
-"""
-
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.statespace.sarimax import SARIMAX
@@ -13,13 +8,7 @@ import os
 warnings.filterwarnings('ignore')
 
 
-class EnergySARIMAXModel:
-    """
-    SARIMAX model wrapper for energy load forecasting.
-    Extends traditional ARIMA with:
-    - Seasonality handling
-    - External regressors (weather features)
-    """
+class EnergySARIMAXModel:    
     
     def __init__(self, config: Dict[str, Any]):
         self.config = config
@@ -29,13 +18,11 @@ class EnergySARIMAXModel:
         
         # SARIMAX parameters from config
         sarimax_config = config.get('sarimax', {})
-        self.order = tuple(sarimax_config.get('order', [1, 1, 1]))
-        self.seasonal_order = tuple(sarimax_config.get('seasonal_order', [1, 1, 1, 7]))
+        self.order = tuple(sarimax_config['order'])
+        self.seasonal_order = tuple(sarimax_config['seasonal_order'])
         
         # External regressors (weather features)
-        self.exog_features = config.get('weather_features', [
-            'temp', 'humidity', 'wind_speed', 'clouds_all'
-        ])
+        self.exog_features = config['weather_features']
         
     def fit_baseline_model(self, train_df: pd.DataFrame) -> 'EnergySARIMAXModel':
         """
@@ -251,48 +238,3 @@ class EnergySARIMAXModel:
         self.is_fitted = model_data['is_fitted']
         
         print(f"Model loaded from {filepath}")
-
-
-if __name__ == "__main__":
-    # Test SARIMAX model
-    print("Testing SARIMAX model...")
-    
-    # Sample config
-    config = {
-        'sarimax': {
-            'order': [1, 1, 1],
-            'seasonal_order': [1, 1, 1, 7]
-        },
-        'weather_features': ['temp', 'humidity', 'wind_speed']
-    }
-    
-    # Create sample data
-    dates = pd.date_range(start='2018-01-01', periods=200, freq='D')
-    data = pd.DataFrame({
-        'ds': dates,
-        'y': np.random.normal(25000, 5000, 200) + np.sin(np.arange(200) * 2 * np.pi / 7) * 2000,
-        'temp': np.random.normal(15, 5, 200),
-        'humidity': np.random.normal(70, 10, 200),
-        'wind_speed': np.random.normal(10, 3, 200)
-    })
-    
-    # Split data
-    train_data = data[:150]
-    test_data = data[150:]
-    
-    # Test model
-    model = EnergySARIMAXModel(config)
-    model.fit_baseline_model(train_data)
-    
-    # Generate forecast
-    forecast = model.predict(test_data)
-    print("\nForecast sample:")
-    print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head())
-    
-    # Feature importance
-    importance = model.get_feature_importance()
-    if not importance.empty:
-        print("\nFeature importance:")
-        print(importance)
-    
-    print("\n✓ Test completed successfully!")
