@@ -9,6 +9,12 @@ import time
 import json
 import os
 from manufacturing_data_loader import ManufacturingDataLoader
+import yaml
+
+def load_config():
+    with open('config.yml', 'r') as f:
+        config = yaml.safe_load(f)
+    return config
 
 # -----------------------------
 # MIP Formulation
@@ -277,6 +283,9 @@ def display_mip_formulation(instance):
 # Main Execution
 # -----------------------------
 if __name__ == "__main__":
+    config = load_config()
+    mip_params = config['mip_parameters']
+
     print("\n" + "="*70)
     print(" "*15 + "MIXED INTEGER PROGRAMMING SOLVER")
     print(" "*20 + "Manufacturing Resource Allocation")
@@ -305,14 +314,13 @@ if __name__ == "__main__":
     print("-"*70)
     
     # Display mathematical formulation
-    display_mip_formulation(instance)
+    display_mip_formulation(instance)    
     
-    # Solve MIP
     solution, objective_value, solve_time, status = solve_mip(
         instance, 
-        solver_name='CBC',
-        time_limit=300,
-        verbose=True
+        solver_name=mip_params['solver_name'],
+        time_limit=mip_params['time_limit_seconds'],
+        verbose=mip_params['verbose']
     )
     
     # Evaluate solution

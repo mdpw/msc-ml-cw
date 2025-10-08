@@ -115,7 +115,7 @@ def display_comparison_table(results):
     print("-"*80)
     if mip['time_seconds']:
         print(f"{'Solving Time (seconds)':<40} {'N/A*':>19} {mip['time_seconds']:>19.2f}")
-        print("\n  * GA execution time not saved in JSON (run comparison mode for time data)")
+        print("\nGA execution time not saved in JSON (run comparison mode for time data)")
     else:
         print(f"{'Solving Time':<40} {'Not Available':>19} {'Not Available':>19}")
     
@@ -138,15 +138,15 @@ def display_comparison_table(results):
     
     gap = comp['optimality_gap_percent']
     if gap < 1:
-        print("  ✓ GA found near-optimal solution (gap < 1%)")
+        print("GA found near-optimal solution (gap < 1%)")
     elif gap < 5:
-        print("  ✓ GA found good quality solution (gap < 5%)")
+        print("GA found good quality solution (gap < 5%)")
     else:
-        print(f"  ⚠ GA solution is {gap:.2f}% below optimal")
+        print(f"GA solution is {gap:.2f}% below optimal")
     
     if mip.get('is_optimal'):
-        print("  ✓ MIP guarantees global optimality")
-        print("  ✓ GA provides good heuristic solution")
+        print("MIP guarantees global optimality")
+        print("GA provides good heuristic solution")
     
     print("\n" + "="*80)
 
@@ -225,21 +225,21 @@ def visualize_comparison_from_saved(results, save_path='comparison_results/ga_vs
     Resources: {results['problem_info']['n_resources']}
     
     GENETIC ALGORITHM:
-    • Profit: ${ga['profit']:,.2f}
-    • Products: {ga['products_selected']}
-    • Hyperparameters: {ga['parameters']}
+    Profit: ${ga['profit']:,.2f}
+    Products: {ga['products_selected']}
+    Hyperparameters: {ga['parameters']}
     
     MIP (OPTIMAL):
-    • Profit: ${mip['profit']:,.2f}
-    • Products: {mip['products_selected']}
-    • Status: {mip.get('solver_status', 'N/A')}
+    Profit: ${mip['profit']:,.2f}
+    Products: {mip['products_selected']}
+    Status: {mip.get('solver_status', 'N/A')}
     
     PERFORMANCE:
-    • Gap: {gap:.2f}%
-    • Profit Difference: ${profit_diff:,.2f}
+    Gap: {gap:.2f}%
+    Profit Difference: ${profit_diff:,.2f}
     
     RECOMMENDATION:
-    {'✓ GA: Excellent near-optimal solution' if gap < 5 else '⚠ Consider MIP for better quality'}
+    {'GA: Excellent near-optimal solution' if gap < 5 else 'Consider MIP for better quality'}
     
     Note: Time comparison unavailable from saved files.
     Run compare_ga_mip.py for complete timing analysis.
@@ -257,7 +257,7 @@ def visualize_comparison_from_saved(results, save_path='comparison_results/ga_vs
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.show()
     
-    print(f"\n✓ Comparison visualization saved to: {save_path}")
+    print(f"\nComparison visualization saved to: {save_path}")
 
 # -----------------------------
 # Save Comparison Results
@@ -269,7 +269,7 @@ def save_comparison_results(results, filename="comparison_results/comparison_fro
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(results, f, indent=2)
     
-    print(f"✓ Comparison results saved to: {filename}")
+    print(f"Comparison results saved to: {filename}")
 
 # -----------------------------
 # Generate Text Report
@@ -283,40 +283,40 @@ def generate_report(results, filename="comparison_results/comparison_report_save
     gap = comp['optimality_gap_percent']
     
     report = f"""
-{'='*80}
-              GA vs MIP COMPARISON REPORT (FROM SAVED RESULTS)
-{'='*80}
+        {'='*80}
+                    GA vs MIP COMPARISON REPORT (FROM SAVED RESULTS)
+        {'='*80}
 
-PROBLEM DETAILS:
-{'-'*80}
-Company: {results['problem_info']['company']}
-Resources: {results['problem_info']['n_resources']}
+        PROBLEM DETAILS:
+        {'-'*80}
+        Company: {results['problem_info']['company']}
+        Resources: {results['problem_info']['n_resources']}
 
-ALGORITHM PERFORMANCE:
-{'-'*80}
+        ALGORITHM PERFORMANCE:
+        {'-'*80}
 
-1. GENETIC ALGORITHM
-   • Objective Value: ${ga['profit']:,.2f}
-   • Products Selected: {ga['products_selected']}
-   • Constraints Satisfied: {'Yes' if ga['constraints_satisfied'] else 'No'}
-   • Parameters: {ga['parameters']}
+        1. GENETIC ALGORITHM
+        • Objective Value: ${ga['profit']:,.2f}
+        • Products Selected: {ga['products_selected']}
+        • Constraints Satisfied: {'Yes' if ga['constraints_satisfied'] else 'No'}
+        • Parameters: {ga['parameters']}
 
-2. MIXED INTEGER PROGRAMMING (OPTIMAL)
-   • Objective Value: ${mip['profit']:,.2f}
-   • Products Selected: {mip['products_selected']}
-   • Constraints Satisfied: {'Yes' if mip['constraints_satisfied'] else 'No'}
-   • Solver Status: {mip.get('solver_status', 'N/A')}
-   • Optimality: {'Guaranteed Optimal' if mip.get('is_optimal') else 'Not Guaranteed'}
+        2. MIXED INTEGER PROGRAMMING (OPTIMAL)
+        • Objective Value: ${mip['profit']:,.2f}
+        • Products Selected: {mip['products_selected']}
+        • Constraints Satisfied: {'Yes' if mip['constraints_satisfied'] else 'No'}
+        • Solver Status: {mip.get('solver_status', 'N/A')}
+        • Optimality: {'Guaranteed Optimal' if mip.get('is_optimal') else 'Not Guaranteed'}
 
-COMPARISON METRICS:
-{'-'*80}
-• Profit Difference: ${comp['profit_difference']:,.2f}
-• Optimality Gap: {gap:.2f}%
-• Time Comparison: Not available from saved files
+        COMPARISON METRICS:
+        {'-'*80}
+        • Profit Difference: ${comp['profit_difference']:,.2f}
+        • Optimality Gap: {gap:.2f}%
+        • Time Comparison: Not available from saved files
 
-ANALYSIS:
-{'-'*80}
-"""
+        ANALYSIS:
+        {'-'*80}
+        """
     
     if gap < 1:
         report += "✓ Solution Quality: EXCELLENT - GA found near-optimal solution (gap < 1%)\n"
@@ -326,24 +326,24 @@ ANALYSIS:
         report += "⚠ Solution Quality: FAIR - Consider parameter tuning\n"
     
     report += f"""
-RECOMMENDATIONS:
-{'-'*80}
-• Use GA for: Fast, near-optimal solutions in production
-• Use MIP for: Guaranteed optimal solutions for critical decisions
-• Gap of {gap:.2f}% suggests GA is {'highly effective' if gap < 5 else 'acceptable'}
+                RECOMMENDATIONS:
+                {'-'*80}
+                • Use GA for: Fast, near-optimal solutions in production
+                • Use MIP for: Guaranteed optimal solutions for critical decisions
+                • Gap of {gap:.2f}% suggests GA is {'highly effective' if gap < 5 else 'acceptable'}
 
-NOTE: For complete timing and scalability analysis, run compare_ga_mip.py
-      which executes both algorithms and measures performance.
+                NOTE: For complete timing and scalability analysis, run compare_ga_mip.py
+                    which executes both algorithms and measures performance.
 
-{'='*80}
-"""
+                {'='*80}
+                """
     
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(report)
     
     print(report)
-    print(f"✓ Report saved to: {filename}")
+    print(f"Report saved to: {filename}")
 
 # -----------------------------
 # Main Execution
@@ -388,7 +388,7 @@ if __name__ == "__main__":
         print("\n" + "="*80 + "\n")
         
     except FileNotFoundError as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\nError: {e}")
         print("\nPlease run the following commands first:")
         print("  1. python genetic_algorithm_solver.py")
         print("  2. python mip_solver.py")

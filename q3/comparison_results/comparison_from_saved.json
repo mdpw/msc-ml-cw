@@ -1,34 +1,34 @@
 {
   "problem_info": {
-    "company": "TechParts Manufacturing Corp.",
-    "n_products": 64,
-    "n_resources": 10
+    "company": "TechParts Manufacturing Corporation",
+    "n_products": 28,
+    "n_resources": 5
   },
   "ga": {
     "method": "Genetic Algorithm",
-    "profit": 54413000.0,
+    "profit": 23321000.0,
     "time_seconds": null,
     "constraints_satisfied": true,
-    "products_selected": 64,
+    "products_selected": 28,
     "parameters": {
       "population_size": 150,
       "mutation_rate": 0.01,
-      "crossover_rate": 0.9,
-      "generations": 200
+      "crossover_rate": 0.7,
+      "generations": 100
     }
   },
   "mip": {
     "method": "Mixed Integer Programming",
-    "profit": 59187000.0,
-    "time_seconds": 300.3933024406433,
+    "profit": 24381000.0,
+    "time_seconds": 1.1255950927734375,
     "constraints_satisfied": true,
-    "products_selected": 68,
+    "products_selected": 29,
     "solver_status": "Optimal",
     "is_optimal": true
   },
   "comparison": {
-    "profit_difference": 4774000.0,
-    "optimality_gap_percent": 8.065960430499942,
+    "profit_difference": 1060000.0,
+    "optimality_gap_percent": 4.347647758500472,
     "ga_speedup_factor": null,
     "time_difference_seconds": null
   }

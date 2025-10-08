@@ -1,17 +1,18 @@
-"""
-Genetic Algorithm Solver for Manufacturing Resource Allocation
-Can be run standalone or imported by comparison module
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 from manufacturing_data_loader import ManufacturingDataLoader
 import json
 import os
+import yaml
 
 # -----------------------------
 # Genetic Algorithm Components
 # -----------------------------
+def load_config():
+    with open('config.yml', 'r') as f:
+        config = yaml.safe_load(f)
+    return config
+
 def initialize_population(pop_size, n_products):
     """Create initial population of binary chromosomes."""
     return np.random.randint(2, size=(pop_size, n_products))
@@ -359,6 +360,8 @@ def save_ga_solution(instance, solution, profit, best_params=None,
 # Main Execution (Standalone Mode)
 # -----------------------------
 if __name__ == "__main__":
+    config = load_config()
+    ga_params = config['ga_parameters']
     print("\n" + "="*70)
     print(" "*15 + "GENETIC ALGORITHM OPTIMIZATION")
     print(" "*20 + "Manufacturing Resource Allocation")
@@ -390,13 +393,13 @@ if __name__ == "__main__":
     print("\n" + "="*70)
     print(" "*20 + "HYPERPARAMETER TUNING PHASE")
     print("="*70)
-    
+        
     best_solution, best_profit, best_params, convergence = tune_hyperparameters(
         instance,
-        pop_sizes=[50, 100, 150],
-        mutation_rates=[0.01, 0.02, 0.05],
-        crossover_rates=[0.7, 0.8, 0.9],
-        generations_list=[100, 200],
+        pop_sizes=ga_params['hyperparameter_tuning']['population_sizes'],
+        mutation_rates=ga_params['hyperparameter_tuning']['mutation_rates'],
+        crossover_rates=ga_params['hyperparameter_tuning']['crossover_rates'],
+        generations_list=ga_params['hyperparameter_tuning']['generations_list'],
         verbose=True
     )
     

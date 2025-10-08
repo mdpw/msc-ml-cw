@@ -4,26 +4,31 @@ import pandas as pd
 from typing import Dict, List
 import os
 import json
+import yaml
+
+def load_config():
+    with open('config.yml', 'r') as f:
+        config = yaml.safe_load(f)
+    return config
 
 class ManufacturingDataLoader:
-    """
-    Manufacturing Production Planning Data Loader
-    Downloads OR-Library MDKS data and converts to manufacturing context
-    """
-    
-    def __init__(self, company_name="TechParts Manufacturing Corp.", 
-                 planning_period="Q1 2025"):
+    def __init__(self, company_name=None, planning_period=None):
+        config = load_config()
+        data_settings = config['data_settings']
         self.base_url = "http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/"
-        self.data_dir = "manufacturing_data"
-        self.company_name = company_name
-        self.planning_period = planning_period
+        self.data_dir = data_settings['data_directory']
+        self.company_name = data_settings['company_name']
+        self.planning_period = data_settings['planning_period']
         
         # Create directory if it doesn't exist
         if not os.path.exists(self.data_dir):
             os.makedirs(self.data_dir)
     
     # Download OR-Library data and convert to manufacturing context
-    def download_and_convert(self, filename: str = "mknapcb5.txt") -> List[Dict]:
+    def download_and_convert(self, filename: str = None) -> List[Dict]:
+        config = load_config()
+        if filename is None:
+            filename = config['data_settings']['or_library_file']
         print("="*70)
         print(f"MANUFACTURING DATA LOADER - {self.company_name}")
         print("="*70)
@@ -329,16 +334,21 @@ class ManufacturingDataLoader:
 
 
 if __name__ == "__main__":
+    config = load_config()
     # Initialize loader with company details
     loader = ManufacturingDataLoader(
-        company_name="TechParts Manufacturing Corporation",
-        planning_period="Q1 2025"
+        company_name=config['data_settings']['company_name'],
+        planning_period=config['data_settings']['planning_period']
     )
     
     # Download and convert OR-Library data to manufacturing context
-    instances = loader.download_and_convert("mknapcb5.txt")
+    instances = loader.download_and_convert(config['data_settings']['or_library_file'])
     
     if instances:
+        # Only show summary for first problem
+        print(f"\nFound {len(instances)} problems in dataset")
+        print("Using first problem for analysis...")
+
         # Create and display summary
         summary_df = loader.create_summary_dataframe(instances)
         print("\n" + "="*70)
@@ -346,14 +356,14 @@ if __name__ == "__main__":
         print("="*70)
         print(summary_df.to_string(index=False))
         
-        # Save first problem (recommended for assignment)
+        # Save and display ONLY the first problem
         print("\n" + "="*70)
         print("SAVING PROBLEM 1 FOR DETAILED ANALYSIS")
         print("="*70)
-        loader.save_manufacturing_instance(instances[0], "manufacturing_problem_1")
+        loader.save_manufacturing_instance(instances[0], config['data_settings']['problem_instance_name'])
         
         # Display problem details
-        loader.display_manufacturing_problem(instances[0])
+        loader.display_manufacturing_problem(instances[0])  # Only display first one
         
         print("\n" + "="*70)
         print("MANUFACTURING DATA READY!")

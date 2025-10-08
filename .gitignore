@@ -8,6 +8,7 @@ __pycache__/
 
 # Virtual Environments
 energy-env/
+manufacturing-env/
 venv/
 env/
 ENV/
