@@ -245,7 +245,7 @@ def save_mip_solution(instance, solution, profit, solve_time, status,
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
     
-    print(f"✓ MIP solution saved to: {filepath}")
+    print(f"MIP solution saved to: {filepath}")
 
 # -----------------------------
 # Display MIP Formulation
@@ -256,22 +256,22 @@ def display_mip_formulation(instance):
     print(" "*15 + "MATHEMATICAL FORMULATION (MIP)")
     print("="*70)
     
-    print("\n📊 DECISION VARIABLES:")
+    print("\nDECISION VARIABLES:")
     print("-" * 70)
     print(f"  x_i ∈ {{0, 1}} for i = 1, 2, ..., {instance['n_products']}")
     print("  where x_i = 1 if product i is selected for production")
     print("        x_i = 0 otherwise")
     
-    print("\n🎯 OBJECTIVE FUNCTION:")
+    print("\nOBJECTIVE FUNCTION:")
     print("-" * 70)
-    print("  Maximize: Z = Σ(profit_i × x_i)")
+    print("  Maximize: Z = Σ(profit_i * x_i)")
     print(f"  where profit_i are the profit margins for {instance['n_products']} products")
     
-    print("\n⚙️ CONSTRAINTS:")
+    print("\nCONSTRAINTS:")
     print("-" * 70)
     print(f"  Resource Capacity Constraints ({instance['n_resources']} constraints):")
     for r in range(instance['n_resources']):
-        print(f"    Σ(resource_consumption_{r},i × x_i) ≤ {instance['resource_capacities'][r]}")
+        print(f"    Σ(resource_consumption_{r},i * x_i) ≤ {instance['resource_capacities'][r]}")
         print(f"      [{instance['resource_names'][r]}: {instance['resource_units'][r]}]")
     
     print("\n  Non-negativity and Binary Constraints:")

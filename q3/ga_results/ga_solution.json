@@ -3,49 +3,25 @@
   "company_name": "TechParts Manufacturing Corporation",
   "planning_period": "Q1 2025",
   "optimization_method": "Genetic Algorithm",
-  "best_profit_usd": 23321000.0,
+  "best_profit_usd": 23702000.0,
   "number_of_selected_products": 28,
   "hyperparameters": {
-    "population_size": 150,
+    "population_size": 100,
     "mutation_rate": 0.01,
     "crossover_rate": 0.7,
-    "generations": 100
+    "generations": 200
   },
   "selected_products": [
     {
-      "sku": "Gadget-A02",
-      "category": "Gadget",
-      "profit_usd": 803000.0,
+      "sku": "Assembly-A05",
+      "category": "Assembly",
+      "profit_usd": 834000.0,
       "resource_usage": {
-        "CNC_Machine_Hours": 41.0,
-        "Assembly_Line_Hours": 883.0,
-        "Skilled_Labor_Hours": 361.0,
-        "Raw_Material_Budget_USD": 197.0,
-        "Energy_Consumption_kWh": 36.0
-      }
-    },
-    {
-      "sku": "Component-A03",
-      "category": "Component",
-      "profit_usd": 667000.0,
-      "resource_usage": {
-        "CNC_Machine_Hours": 523.0,
-        "Assembly_Line_Hours": 229.0,
-        "Skilled_Labor_Hours": 199.0,
-        "Raw_Material_Budget_USD": 817.0,
-        "Energy_Consumption_kWh": 287.0
-      }
-    },
-    {
-      "sku": "Module-A04",
-      "category": "Module",
-      "profit_usd": 1103000.0,
-      "resource_usage": {
-        "CNC_Machine_Hours": 215.0,
-        "Assembly_Line_Hours": 569.0,
-        "Skilled_Labor_Hours": 781.0,
-        "Raw_Material_Budget_USD": 1000.0,
-        "Energy_Consumption_kWh": 577.0
+        "CNC_Machine_Hours": 819.0,
+        "Assembly_Line_Hours": 706.0,
+        "Skilled_Labor_Hours": 596.0,
+        "Raw_Material_Budget_USD": 44.0,
+        "Energy_Consumption_kWh": 45.0
       }
     },
     {
@@ -61,18 +37,6 @@
       }
     },
     {
-      "sku": "Component-A08",
-      "category": "Component",
-      "profit_usd": 856000.0,
-      "resource_usage": {
-        "CNC_Machine_Hours": 193.0,
-        "Assembly_Line_Hours": 727.0,
-        "Skilled_Labor_Hours": 358.0,
-        "Raw_Material_Budget_USD": 659.0,
-        "Energy_Consumption_kWh": 654.0
-      }
-    },
-    {
       "sku": "Module-A09",
       "category": "Module",
       "profit_usd": 690000.0,
@@ -85,15 +49,15 @@
       }
     },
     {
-      "sku": "Gadget-A17",
-      "category": "Gadget",
-      "profit_usd": 860000.0,
+      "sku": "Widget-A16",
+      "category": "Widget",
+      "profit_usd": 1002000.0,
       "resource_usage": {
-        "CNC_Machine_Hours": 298.0,
-        "Assembly_Line_Hours": 573.0,
-        "Skilled_Labor_Hours": 229.0,
-        "Raw_Material_Budget_USD": 807.0,
-        "Energy_Consumption_kWh": 942.0
+        "CNC_Machine_Hours": 553.0,
+        "Assembly_Line_Hours": 253.0,
+        "Skilled_Labor_Hours": 749.0,
+        "Raw_Material_Budget_USD": 980.0,
+        "Energy_Consumption_kWh": 335.0
       }
     },
     {
@@ -118,6 +82,18 @@
         "Skilled_Labor_Hours": 551.0,
         "Raw_Material_Budget_USD": 636.0,
         "Energy_Consumption_kWh": 139.0
+      }
+    },
+    {
+      "sku": "Widget-B06",
+      "category": "Widget",
+      "profit_usd": 746000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 282.0,
+        "Assembly_Line_Hours": 593.0,
+        "Skilled_Labor_Hours": 442.0,
+        "Raw_Material_Budget_USD": 129.0,
+        "Energy_Consumption_kWh": 845.0
       }
     },
     {
@@ -169,27 +145,15 @@
       }
     },
     {
-      "sku": "Component-C03",
-      "category": "Component",
-      "profit_usd": 957000.0,
+      "sku": "Assembly-B15",
+      "category": "Assembly",
+      "profit_usd": 942000.0,
       "resource_usage": {
-        "CNC_Machine_Hours": 320.0,
-        "Assembly_Line_Hours": 892.0,
-        "Skilled_Labor_Hours": 482.0,
-        "Raw_Material_Budget_USD": 967.0,
-        "Energy_Consumption_kWh": 768.0
-      }
-    },
-    {
-      "sku": "Module-C04",
-      "category": "Module",
-      "profit_usd": 798000.0,
-      "resource_usage": {
-        "CNC_Machine_Hours": 870.0,
-        "Assembly_Line_Hours": 60.0,
-        "Skilled_Labor_Hours": 732.0,
-        "Raw_Material_Budget_USD": 13.0,
-        "Energy_Consumption_kWh": 460.0
+        "CNC_Machine_Hours": 191.0,
+        "Assembly_Line_Hours": 937.0,
+        "Skilled_Labor_Hours": 485.0,
+        "Raw_Material_Budget_USD": 585.0,
+        "Energy_Consumption_kWh": 425.0
       }
     },
     {
@@ -229,6 +193,42 @@
       }
     },
     {
+      "sku": "Gadget-D02",
+      "category": "Gadget",
+      "profit_usd": 831000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 136.0,
+        "Assembly_Line_Hours": 758.0,
+        "Skilled_Labor_Hours": 322.0,
+        "Raw_Material_Budget_USD": 525.0,
+        "Energy_Consumption_kWh": 647.0
+      }
+    },
+    {
+      "sku": "Component-D03",
+      "category": "Component",
+      "profit_usd": 821000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 112.0,
+        "Assembly_Line_Hours": 431.0,
+        "Skilled_Labor_Hours": 404.0,
+        "Raw_Material_Budget_USD": 774.0,
+        "Energy_Consumption_kWh": 237.0
+      }
+    },
+    {
+      "sku": "Module-D04",
+      "category": "Module",
+      "profit_usd": 825000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 751.0,
+        "Assembly_Line_Hours": 580.0,
+        "Skilled_Labor_Hours": 403.0,
+        "Raw_Material_Budget_USD": 283.0,
+        "Energy_Consumption_kWh": 631.0
+      }
+    },
+    {
       "sku": "Widget-D06",
       "category": "Widget",
       "profit_usd": 852000.0,
@@ -253,27 +253,15 @@
       }
     },
     {
-      "sku": "Widget-D11",
-      "category": "Widget",
-      "profit_usd": 510000.0,
+      "sku": "Module-D14",
+      "category": "Module",
+      "profit_usd": 740000.0,
       "resource_usage": {
-        "CNC_Machine_Hours": 797.0,
-        "Assembly_Line_Hours": 252.0,
-        "Skilled_Labor_Hours": 73.0,
-        "Raw_Material_Budget_USD": 68.0,
-        "Energy_Consumption_kWh": 483.0
-      }
-    },
-    {
-      "sku": "Gadget-D17",
-      "category": "Gadget",
-      "profit_usd": 996000.0,
-      "resource_usage": {
-        "CNC_Machine_Hours": 882.0,
-        "Assembly_Line_Hours": 287.0,
-        "Skilled_Labor_Hours": 582.0,
-        "Raw_Material_Budget_USD": 649.0,
-        "Energy_Consumption_kWh": 202.0
+        "CNC_Machine_Hours": 46.0,
+        "Assembly_Line_Hours": 368.0,
+        "Skilled_Labor_Hours": 651.0,
+        "Raw_Material_Budget_USD": 421.0,
+        "Energy_Consumption_kWh": 637.0
       }
     },
     {
@@ -286,6 +274,18 @@
         "Skilled_Labor_Hours": 143.0,
         "Raw_Material_Budget_USD": 191.0,
         "Energy_Consumption_kWh": 594.0
+      }
+    },
+    {
+      "sku": "Widget-E01",
+      "category": "Widget",
+      "profit_usd": 1140000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 987.0,
+        "Assembly_Line_Hours": 512.0,
+        "Skilled_Labor_Hours": 624.0,
+        "Raw_Material_Budget_USD": 983.0,
+        "Energy_Consumption_kWh": 602.0
       }
     },
     {
@@ -313,6 +313,18 @@
       }
     },
     {
+      "sku": "Gadget-E12",
+      "category": "Gadget",
+      "profit_usd": 954000.0,
+      "resource_usage": {
+        "CNC_Machine_Hours": 808.0,
+        "Assembly_Line_Hours": 651.0,
+        "Skilled_Labor_Hours": 110.0,
+        "Raw_Material_Budget_USD": 977.0,
+        "Energy_Consumption_kWh": 362.0
+      }
+    },
+    {
       "sku": "Component-E13",
       "category": "Component",
       "profit_usd": 906000.0,
@@ -322,18 +334,6 @@
         "Skilled_Labor_Hours": 11.0,
         "Raw_Material_Budget_USD": 302.0,
         "Energy_Consumption_kWh": 617.0
-      }
-    },
-    {
-      "sku": "Module-E14",
-      "category": "Module",
-      "profit_usd": 904000.0,
-      "resource_usage": {
-        "CNC_Machine_Hours": 615.0,
-        "Assembly_Line_Hours": 893.0,
-        "Skilled_Labor_Hours": 213.0,
-        "Raw_Material_Budget_USD": 687.0,
-        "Energy_Consumption_kWh": 553.0
       }
     },
     {
@@ -353,37 +353,37 @@
     {
       "name": "CNC_Machine_Hours",
       "capacity": 11927.0,
-      "used": 11900.0,
+      "used": 11831.0,
       "unit": "hours",
-      "utilization_percent": 99.77362287247422
+      "utilization_percent": 99.195103546575
     },
     {
       "name": "Assembly_Line_Hours",
       "capacity": 13727.0,
-      "used": 13275.0,
+      "used": 13699.0,
       "unit": "hours",
-      "utilization_percent": 96.70721934872878
+      "utilization_percent": 99.79602243753187
     },
     {
       "name": "Skilled_Labor_Hours",
       "capacity": 11551.0,
-      "used": 10766.0,
+      "used": 11542.0,
       "unit": "hours",
-      "utilization_percent": 93.20405159726431
+      "utilization_percent": 99.92208466799411
     },
     {
       "name": "Raw_Material_Budget_USD",
       "capacity": 13056.0,
-      "used": 12783.0,
+      "used": 12620.0,
       "unit": "USD",
-      "utilization_percent": 97.90900735294117
+      "utilization_percent": 96.66053921568627
     },
     {
       "name": "Energy_Consumption_kWh",
       "capacity": 13460.0,
-      "used": 13126.0,
+      "used": 12930.0,
       "unit": "kWh",
-      "utilization_percent": 97.518573551263
+      "utilization_percent": 96.06240713224369
     }
   ]
 }

@@ -6,29 +6,29 @@
   },
   "ga": {
     "method": "Genetic Algorithm",
-    "profit": 23321000.0,
+    "profit": 23702000.0,
     "time_seconds": null,
     "constraints_satisfied": true,
     "products_selected": 28,
     "parameters": {
-      "population_size": 150,
+      "population_size": 100,
       "mutation_rate": 0.01,
       "crossover_rate": 0.7,
-      "generations": 100
+      "generations": 200
     }
   },
   "mip": {
     "method": "Mixed Integer Programming",
     "profit": 24381000.0,
-    "time_seconds": 1.1255950927734375,
+    "time_seconds": 1.1824429035186768,
     "constraints_satisfied": true,
     "products_selected": 29,
     "solver_status": "Optimal",
     "is_optimal": true
   },
   "comparison": {
-    "profit_difference": 1060000.0,
-    "optimality_gap_percent": 4.347647758500472,
+    "profit_difference": 679000.0,
+    "optimality_gap_percent": 2.7849554981337925,
     "ga_speedup_factor": null,
     "time_difference_seconds": null
   }

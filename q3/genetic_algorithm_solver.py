@@ -101,8 +101,17 @@ def genetic_algorithm(instance, pop_size=100, generations=200,
         
         # Evaluate fitness
         fitnesses = np.array([fitness(ind, profits) for ind in repaired_population])
-        convergence.append(np.max(fitnesses))
+        
+        # Update best solution if current generation has better solution
+        gen_best_idx = np.argmax(fitnesses)
+        if fitnesses[gen_best_idx] > best_fitness:
+            best_fitness = fitnesses[gen_best_idx]
+            best_solution = repaired_population[gen_best_idx].copy()
+        
+        # CRITICAL FIX: Track the OVERALL best fitness, not current generation's best
+        convergence.append(best_fitness)  # Track overall best across all generations
 
+        # Create new population
         new_population = []
         while len(new_population) < pop_size:
             parent1 = tournament_selection(repaired_population, fitnesses)
@@ -113,16 +122,14 @@ def genetic_algorithm(instance, pop_size=100, generations=200,
             new_population.extend([child1, child2])
         population = np.array(new_population[:pop_size])
 
-        gen_best_idx = np.argmax(fitnesses)
-        if fitnesses[gen_best_idx] > best_fitness:
-            best_fitness = fitnesses[gen_best_idx]
-            best_solution = repaired_population[gen_best_idx]
-
         if verbose and gen % 20 == 0:
             print(f"  Generation {gen:3d}: Best Profit = ${best_fitness:,.2f}")
 
     if verbose:
         print(f"  Generation {generations-1:3d}: Best Profit = ${best_fitness:,.2f}")
+
+    # Final consistency check
+    best_fitness = np.sum(best_solution * profits)
 
     return best_solution, best_fitness, convergence
 
@@ -132,9 +139,9 @@ def genetic_algorithm(instance, pop_size=100, generations=200,
 def tune_hyperparameters(instance, pop_sizes, mutation_rates, crossover_rates,
                          generations_list, verbose=True):
     """
-    Tune GA hyperparameters and return best solution with best params.
+    Tune GA hyperparameters and return ONLY the best parameters.
+    The final run will be done separately in main.
     """
-    best_overall_solution = None
     best_overall_profit = -1e12
     best_params = None
 
@@ -160,7 +167,6 @@ def tune_hyperparameters(instance, pop_sizes, mutation_rates, crossover_rates,
 
                     if profit > best_overall_profit:
                         best_overall_profit = profit
-                        best_overall_solution = sol
                         best_params = (pop_size, mut_rate, cross_rate, gens)
 
     print("\n" + "="*70)
@@ -170,22 +176,11 @@ def tune_hyperparameters(instance, pop_sizes, mutation_rates, crossover_rates,
     print(f"  Mutation Rate: {best_params[1]}")
     print(f"  Crossover Rate: {best_params[2]}")
     print(f"  Generations: {best_params[3]}")
-    print(f"  Best Profit: ${best_overall_profit:,.2f}")
+    print(f"  Best Profit During Tuning: ${best_overall_profit:,.2f}")
     print("="*70)
 
-    print("\nRunning final GA with best parameters...")
-    print("-" * 70)
-    
-    final_solution, final_profit, convergence = genetic_algorithm(
-        instance,
-        pop_size=best_params[0],
-        mutation_rate=best_params[1],
-        crossover_rate=best_params[2],
-        generations=best_params[3],
-        verbose=True
-    )
-
-    return final_solution, final_profit, best_params, convergence
+    # Return only best_params (not solution from tuning)
+    return best_params
 
 # -----------------------------
 # Constraint Satisfaction Evaluation
@@ -210,7 +205,7 @@ def detailed_constraint_report(solution, instance):
         feasible = usage <= capacities[r]
         utilization = (usage / capacities[r]) * 100 if capacities[r] > 0 else 0
         
-        status = "SATISFIED" if feasible else "✗ VIOLATED"
+        status = "SATISFIED" if feasible else "VIOLATED"
         if not feasible:
             all_satisfied = False
         
@@ -389,12 +384,12 @@ if __name__ == "__main__":
     print(f"Resources: {', '.join(instance['resource_names'])}")
     print("-"*70)
     
-    # Hyperparameter tuning
+    # PHASE 1: Hyperparameter tuning (find best parameters)
     print("\n" + "="*70)
     print(" "*20 + "HYPERPARAMETER TUNING PHASE")
     print("="*70)
-        
-    best_solution, best_profit, best_params, convergence = tune_hyperparameters(
+    
+    best_params = tune_hyperparameters(
         instance,
         pop_sizes=ga_params['hyperparameter_tuning']['population_sizes'],
         mutation_rates=ga_params['hyperparameter_tuning']['mutation_rates'],
@@ -403,21 +398,52 @@ if __name__ == "__main__":
         verbose=True
     )
     
-    # Final evaluation with constraint satisfaction
+    # PHASE 2: Run final GA with best parameters
+    print("\n" + "="*70)
+    print(" "*20 + "FINAL RUN WITH BEST PARAMETERS")
+    print("="*70)
+    print(f"\nRunning GA with optimized parameters:")
+    print(f"  Population Size: {best_params[0]}")
+    print(f"  Mutation Rate: {best_params[1]}")
+    print(f"  Crossover Rate: {best_params[2]}")
+    print(f"  Generations: {best_params[3]}")
+    print("-" * 70)
+    
+    final_solution, final_profit, convergence = genetic_algorithm(
+        instance,
+        pop_size=best_params[0],
+        mutation_rate=best_params[1],
+        crossover_rate=best_params[2],
+        generations=best_params[3],
+        verbose=True
+    )
+    
+    # ADD DEBUG OUTPUT HERE
+    print("\n" + "="*70)
+    print("DEBUG: Checking consistency")
+    print("="*70)
+    print(f"final_profit (from GA): ${final_profit:,.2f}")
+    print(f"convergence[-1] (last gen): ${convergence[-1]:,.2f}")
+    manual_calc = np.sum(final_solution * np.array(instance['profit_margins_usd']))
+    print(f"Manual calculation: ${manual_calc:,.2f}")
+    print(f"Match: {final_profit == manual_calc}")
+    print("="*70)
+
+    # PHASE 3: Evaluate final solution
     print("\n" + "="*70)
     print(" "*20 + "FINAL SOLUTION EVALUATION")
     print("="*70)
     
     total_profit, constraints_satisfied, resource_details = detailed_constraint_report(
-        best_solution, instance
+        final_solution, instance  # Use final_solution
     )
     
-    # Print selected products summary
+    # Print selected products from final solution
     selected_products = [
         (sku, cat) 
         for sku, cat, bit in zip(instance['product_skus'], 
                                   instance['product_categories'], 
-                                  best_solution) 
+                                  final_solution)  # Use final_solution
         if bit == 1
     ]
     
@@ -433,18 +459,21 @@ if __name__ == "__main__":
     print(f"\nTotal Selected: {len(selected_products)} products")
     print("-"*70)
     
-    # Visualize convergence
+    # Visualize convergence from final run
     print("\nGenerating convergence visualization...")
     visualize_convergence(convergence, best_params)
     
-    # Save solution
-    save_ga_solution(instance, best_solution, total_profit, best_params)
+    # Save final solution
+    save_ga_solution(instance, final_solution, final_profit, best_params)
     
+    # Summary uses final solution
     print("\n" + "="*70)
     print(" "*25 + "OPTIMIZATION COMPLETE!")
     print("="*70)
-    print(f"\nBest Profit Achieved: ${total_profit:,.2f}")
+    print(f"\nFinal Run Profit: ${final_profit:,.2f}")
     print(f"Constraints Satisfied: {'YES' if constraints_satisfied else 'NO'}")
-    print(f"Products Selected: {int(np.sum(best_solution))} out of {instance['n_products']}")
+    print(f"Products Selected: {len(selected_products)} out of {instance['n_products']}")
     print(f"Results saved in 'ga_results/' directory")
+    print("\nNOTE: The convergence plot and saved solution are from the final run")
+    print("      with the best hyperparameters found during tuning.")
     print("\n" + "="*70 + "\n")

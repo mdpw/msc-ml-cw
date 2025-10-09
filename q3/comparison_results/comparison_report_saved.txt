@@ -1,46 +1,38 @@
 
-================================================================================
-              GA vs MIP COMPARISON REPORT (FROM SAVED RESULTS)
-================================================================================
+        ================================================================================
+                    GA vs MIP COMPARISON REPORT (FROM SAVED RESULTS)
+        ================================================================================
 
-PROBLEM DETAILS:
---------------------------------------------------------------------------------
-Company: TechParts Manufacturing Corporation
-Resources: 5
+        PROBLEM DETAILS:
+        --------------------------------------------------------------------------------
+        Company: TechParts Manufacturing Corporation
+        Resources: 5
 
-ALGORITHM PERFORMANCE:
---------------------------------------------------------------------------------
+        ALGORITHM PERFORMANCE:
+        --------------------------------------------------------------------------------
 
-1. GENETIC ALGORITHM
-   • Objective Value: $23,321,000.00
-   • Products Selected: 28
-   • Constraints Satisfied: Yes
-   • Parameters: {'population_size': 150, 'mutation_rate': 0.01, 'crossover_rate': 0.7, 'generations': 100}
+        1. GENETIC ALGORITHM
+        • Objective Value: $23,702,000.00
+        • Products Selected: 28
+        • Constraints Satisfied: Yes
+        • Parameters: {'population_size': 100, 'mutation_rate': 0.01, 'crossover_rate': 0.7, 'generations': 200}
 
-2. MIXED INTEGER PROGRAMMING (OPTIMAL)
-   • Objective Value: $24,381,000.00
-   • Products Selected: 29
-   • Constraints Satisfied: Yes
-   • Solver Status: Optimal
-   • Optimality: Guaranteed Optimal
+        2. MIXED INTEGER PROGRAMMING (OPTIMAL)
+        • Objective Value: $24,381,000.00
+        • Products Selected: 29
+        • Constraints Satisfied: Yes
+        • Solver Status: Optimal
+        • Optimality: Guaranteed Optimal
 
-COMPARISON METRICS:
---------------------------------------------------------------------------------
-• Profit Difference: $1,060,000.00
-• Optimality Gap: 4.35%
-• Time Comparison: Not available from saved files
+        COMPARISON METRICS:
+        --------------------------------------------------------------------------------
+        • Profit Difference: $679,000.00
+        • Optimality Gap: 2.78%
+        • Time Comparison: Not available from saved files
 
-ANALYSIS:
---------------------------------------------------------------------------------
-✓ Solution Quality: GOOD - GA found high-quality solution (gap < 5%)
-
-RECOMMENDATIONS:
---------------------------------------------------------------------------------
-• Use GA for: Fast, near-optimal solutions in production
-• Use MIP for: Guaranteed optimal solutions for critical decisions
-• Gap of 4.35% suggests GA is highly effective
-
-NOTE: For complete timing and scalability analysis, run compare_ga_mip.py
-      which executes both algorithms and measures performance.
-
-================================================================================
+        ANALYSIS:
+        --------------------------------------------------------------------------------
+        Solution Quality: GOOD - GA found high-quality solution (gap < 5%)
+                
+                ================================================================================
+                
