@@ -5,7 +5,7 @@
   "optimization_method": "Mixed Integer Programming (MIP)",
   "solver": "PuLP with CBC",
   "solver_status": "Optimal",
-  "solving_time_seconds": 1.1824429035186768,
+  "solving_time_seconds": 1.004239559173584,
   "best_profit_usd": 24381000.0,
   "number_of_selected_products": 29,
   "selected_products": [

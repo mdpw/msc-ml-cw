@@ -1,8 +1,3 @@
-"""
-Mixed Integer Programming (MIP) Solver for Manufacturing Resource Allocation
-Can be run standalone or imported by comparison module
-"""
-
 import numpy as np
 import pulp
 import time
@@ -165,7 +160,7 @@ def evaluate_mip_solution(solution, instance):
         feasible = usage <= capacities[r]
         utilization = (usage / capacities[r]) * 100 if capacities[r] > 0 else 0
         
-        status = "✓ SATISFIED" if feasible else "✗ VIOLATED"
+        status = "SATISFIED" if feasible else "VIOLATED"
         if not feasible:
             constraints_ok = False
         
@@ -186,7 +181,7 @@ def evaluate_mip_solution(solution, instance):
     
     print("\n" + "="*70)
     print(f"OBJECTIVE VALUE (Total Profit): ${total_profit:,.2f}")
-    print(f"ALL CONSTRAINTS SATISFIED: {'YES ✓' if constraints_ok else 'NO ✗'}")
+    print(f"ALL CONSTRAINTS SATISFIED: {'YES' if constraints_ok else 'NO'}")
     print(f"NUMBER OF SELECTED PRODUCTS: {int(np.sum(solution))}")
     print("="*70 + "\n")
     

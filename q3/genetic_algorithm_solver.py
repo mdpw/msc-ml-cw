@@ -4,6 +4,7 @@ from manufacturing_data_loader import ManufacturingDataLoader
 import json
 import os
 import yaml
+import time
 
 # -----------------------------
 # Genetic Algorithm Components
@@ -263,8 +264,7 @@ def visualize_convergence(convergence, best_params=None, save_path='ga_results/g
     plt.tight_layout()
     
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    plt.show()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')    
     
     print(f"\nConvergence plot saved to: {save_path}")
 
@@ -297,7 +297,7 @@ def evaluate_solution(solution, instance):
 # Save Solution to JSON
 # -----------------------------
 def save_ga_solution(instance, solution, profit, best_params=None, 
-                     filename="ga_solution.json"):
+                     filename="ga_solution.json", execution_time=None):  # Add execution_time parameter
     """Save GA solution to JSON file."""
     selected_products = [
         {
@@ -324,6 +324,7 @@ def save_ga_solution(instance, solution, profit, best_params=None,
         "optimization_method": "Genetic Algorithm",
         "best_profit_usd": float(profit),
         "number_of_selected_products": int(np.sum(solution)),
+        "execution_time_seconds": float(execution_time) if execution_time else None,  # ADD THIS LINE
         "hyperparameters": {
             "population_size": best_params[0] if best_params else None,
             "mutation_rate": best_params[1] if best_params else None,
@@ -384,10 +385,15 @@ if __name__ == "__main__":
     print(f"Resources: {', '.join(instance['resource_names'])}")
     print("-"*70)
     
+    # START TIMING - Total execution time
+    total_start_time = time.time()
+    
     # PHASE 1: Hyperparameter tuning (find best parameters)
     print("\n" + "="*70)
     print(" "*20 + "HYPERPARAMETER TUNING PHASE")
     print("="*70)
+    
+    tuning_start_time = time.time()
     
     best_params = tune_hyperparameters(
         instance,
@@ -397,6 +403,12 @@ if __name__ == "__main__":
         generations_list=ga_params['hyperparameter_tuning']['generations_list'],
         verbose=True
     )
+    
+    tuning_time = time.time() - tuning_start_time
+    
+    print("\n" + "-"*70)
+    print(f"Hyperparameter Tuning Completed in: {tuning_time:.2f} seconds")
+    print("-"*70)
     
     # PHASE 2: Run final GA with best parameters
     print("\n" + "="*70)
@@ -409,6 +421,8 @@ if __name__ == "__main__":
     print(f"  Generations: {best_params[3]}")
     print("-" * 70)
     
+    final_run_start_time = time.time()
+    
     final_solution, final_profit, convergence = genetic_algorithm(
         instance,
         pop_size=best_params[0],
@@ -417,6 +431,9 @@ if __name__ == "__main__":
         generations=best_params[3],
         verbose=True
     )
+    
+    final_run_time = time.time() - final_run_start_time
+    total_execution_time = time.time() - total_start_time
     
     # ADD DEBUG OUTPUT HERE
     print("\n" + "="*70)
@@ -463,14 +480,25 @@ if __name__ == "__main__":
     print("\nGenerating convergence visualization...")
     visualize_convergence(convergence, best_params)
     
-    # Save final solution
-    save_ga_solution(instance, final_solution, final_profit, best_params)
+    # Save final solution WITH TIMING DATA
+    save_ga_solution(instance, final_solution, final_profit, best_params,
+                     execution_time=total_execution_time)  # Pass execution time
+    
+    # Display timing summary
+    print("\n" + "="*70)
+    print(" "*20 + "EXECUTION TIME BREAKDOWN")
+    print("="*70)
+    print(f"Hyperparameter Tuning Time:  {tuning_time:.2f} seconds")
+    print(f"Final Run Time:              {final_run_time:.2f} seconds")
+    print(f"Total Execution Time:        {total_execution_time:.2f} seconds")
+    print("="*70)
     
     # Summary uses final solution
     print("\n" + "="*70)
     print(" "*25 + "OPTIMIZATION COMPLETE!")
     print("="*70)
     print(f"\nFinal Run Profit: ${final_profit:,.2f}")
+    print(f"Execution Time: {total_execution_time:.2f} seconds")
     print(f"Constraints Satisfied: {'YES' if constraints_satisfied else 'NO'}")
     print(f"Products Selected: {len(selected_products)} out of {instance['n_products']}")
     print(f"Results saved in 'ga_results/' directory")

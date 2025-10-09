@@ -49,7 +49,7 @@ def extract_comparison_data(ga_data, mip_data):
         'ga': {
             'method': 'Genetic Algorithm',
             'profit': float(ga_data.get('best_profit_usd', 0)),
-            'time_seconds': None,  # Not available from saved file
+            'time_seconds': float(ga_data.get('execution_time_seconds', 0)),
             'constraints_satisfied': True,  # Assumed from saved solution
             'products_selected': ga_data.get('number_of_selected_products', 0),
             'parameters': ga_data.get('hyperparameters', {})
@@ -68,6 +68,8 @@ def extract_comparison_data(ga_data, mip_data):
     # Calculate comparison metrics
     mip_profit = results['mip']['profit']
     ga_profit = results['ga']['profit']
+    mip_execution_time = results['mip']['time_seconds']
+    ga__execution_time = results['ga']['time_seconds']
     
     if mip_profit > 0:
         optimality_gap = ((mip_profit - ga_profit) / mip_profit) * 100
@@ -76,9 +78,8 @@ def extract_comparison_data(ga_data, mip_data):
     
     results['comparison'] = {
         'profit_difference': float(mip_profit - ga_profit),
-        'optimality_gap_percent': float(optimality_gap),
-        'ga_speedup_factor': None,  # Can't calculate without time data
-        'time_difference_seconds': None
+        'optimality_gap_percent': float(optimality_gap),        
+        'time_difference_seconds': abs(float(mip_execution_time - ga__execution_time))
     }
     
     return results
@@ -124,6 +125,7 @@ def generate_report(results, filename="comparison_results/comparison_report_save
         • Products Selected: {ga['products_selected']}
         • Constraints Satisfied: {'Yes' if ga['constraints_satisfied'] else 'No'}
         • Parameters: {ga['parameters']}
+        • Execution Time: {ga['time_seconds']:,.2f} seconds
 
         2. MIXED INTEGER PROGRAMMING (OPTIMAL)
         • Objective Value: ${mip['profit']:,.2f}
@@ -131,12 +133,13 @@ def generate_report(results, filename="comparison_results/comparison_report_save
         • Constraints Satisfied: {'Yes' if mip['constraints_satisfied'] else 'No'}
         • Solver Status: {mip.get('solver_status', 'N/A')}
         • Optimality: {'Guaranteed Optimal' if mip.get('is_optimal') else 'Not Guaranteed'}
+        • Execution Time: {mip['time_seconds']:,.2f} seconds
 
         COMPARISON METRICS:
         {'-'*80}
         • Profit Difference: ${comp['profit_difference']:,.2f}
         • Optimality Gap: {gap:.2f}%
-        • Time Comparison: Not available from saved files
+        • Time Difference: {abs(comp['time_difference_seconds']):,.2f} seconds
 
         ANALYSIS:
         {'-'*80}
@@ -147,11 +150,7 @@ def generate_report(results, filename="comparison_results/comparison_report_save
     elif gap < 5:
         report += "Solution Quality: GOOD - GA found high-quality solution (gap < 5%)\n"
     else:
-        report += "Solution Quality: FAIR - Consider parameter tuning\n"
-    
-    report += f"""                
-                {'='*80}
-                """
+        report += "Solution Quality: FAIR - Consider parameter tuning\n"       
     
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, 'w', encoding='utf-8') as f:

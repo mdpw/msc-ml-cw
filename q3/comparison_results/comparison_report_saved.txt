@@ -12,10 +12,11 @@
         --------------------------------------------------------------------------------
 
         1. GENETIC ALGORITHM
-        • Objective Value: $23,702,000.00
+        • Objective Value: $23,604,000.00
         • Products Selected: 28
         • Constraints Satisfied: Yes
-        • Parameters: {'population_size': 100, 'mutation_rate': 0.01, 'crossover_rate': 0.7, 'generations': 200}
+        • Parameters: {'population_size': 150, 'mutation_rate': 0.01, 'crossover_rate': 0.7, 'generations': 200}
+        • Execution Time: 73.08 seconds
 
         2. MIXED INTEGER PROGRAMMING (OPTIMAL)
         • Objective Value: $24,381,000.00
@@ -23,16 +24,14 @@
         • Constraints Satisfied: Yes
         • Solver Status: Optimal
         • Optimality: Guaranteed Optimal
+        • Execution Time: 1.00 seconds
 
         COMPARISON METRICS:
         --------------------------------------------------------------------------------
-        • Profit Difference: $679,000.00
-        • Optimality Gap: 2.78%
-        • Time Comparison: Not available from saved files
+        • Profit Difference: $777,000.00
+        • Optimality Gap: 3.19%
+        • Time Difference: 72.08 seconds
 
         ANALYSIS:
         --------------------------------------------------------------------------------
         Solution Quality: GOOD - GA found high-quality solution (gap < 5%)
-                
-                ================================================================================
-                

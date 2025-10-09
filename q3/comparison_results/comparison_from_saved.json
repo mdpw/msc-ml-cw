@@ -6,12 +6,12 @@
   },
   "ga": {
     "method": "Genetic Algorithm",
-    "profit": 23702000.0,
-    "time_seconds": null,
+    "profit": 23604000.0,
+    "time_seconds": 73.08335423469543,
     "constraints_satisfied": true,
     "products_selected": 28,
     "parameters": {
-      "population_size": 100,
+      "population_size": 150,
       "mutation_rate": 0.01,
       "crossover_rate": 0.7,
       "generations": 200
@@ -20,16 +20,15 @@
   "mip": {
     "method": "Mixed Integer Programming",
     "profit": 24381000.0,
-    "time_seconds": 1.1824429035186768,
+    "time_seconds": 1.004239559173584,
     "constraints_satisfied": true,
     "products_selected": 29,
     "solver_status": "Optimal",
     "is_optimal": true
   },
   "comparison": {
-    "profit_difference": 679000.0,
-    "optimality_gap_percent": 2.7849554981337925,
-    "ga_speedup_factor": null,
-    "time_difference_seconds": null
+    "profit_difference": 777000.0,
+    "optimality_gap_percent": 3.1869078380706286,
+    "time_difference_seconds": 72.07911467552185
   }
 }
