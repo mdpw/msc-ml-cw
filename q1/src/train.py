@@ -7,15 +7,16 @@ mlruns_path = Path("mlruns").absolute()
 mlflow.set_tracking_uri(f"file:///{str(mlruns_path).replace(os.sep, '/')}")
 # Also set a default artifacts location (important!)
 mlflow.set_experiment("bank_marketing")
-
 import mlflow.sklearn
 import pandas as pd
+import numpy as np  # Added this import for the fallback section
 from sklearn.pipeline import Pipeline
 from .data import load_splits
 from .modeling import build_search, MODELS
 from .evaluate import eval_at_threshold, best_f1_threshold, plot_and_save_curves, plot_and_save_confusion
 from sklearn.metrics import roc_auc_score
 import joblib
+from .explain import shap_summary
 
 def parse_args():
     ap = argparse.ArgumentParser()
@@ -116,7 +117,16 @@ def main():
             })
 
             # Log model to MLflow
-            mlflow.sklearn.log_model(pipe_best, artifact_path='model')
+            # Save as pickle artifact (works for both sklearn and imblearn)
+            import pickle
+            import tempfile
+            import os
+            
+            with tempfile.TemporaryDirectory() as tmpdir:
+                model_file = os.path.join(tmpdir, 'model.pkl')
+                with open(model_file, 'wb') as f:
+                    pickle.dump(pipe_best, f)
+                mlflow.log_artifact(model_file, artifact_path='model')
             
             print(f"  → Test AUC: {test_auc:.3f}, F1: {metrics['F1']:.3f}")
 
@@ -136,6 +146,49 @@ def main():
         print(f"  Path: {model_path}")
         print(f"  Test AUC: {best_auc:.3f}")
         print(f"  Test F1: {best_model_info['test_f1']:.3f}")
+
+        print("\nGenerating SHAP explanations for best model...")
+        try:
+            import matplotlib.pyplot as plt
+            # FIXED: Pass the pipeline and X_val sample correctly
+            top_features, scores, model_type = shap_summary(best_model, X_val.sample(min(500, len(X_val))), max_features=5)
+            
+            # The plots are already saved by shap_summary function
+            print(f"SHAP analysis completed for {model_type}")
+            print("Top 5 features:")
+            for i, (feature, score) in enumerate(zip(top_features, scores)):
+                print(f"  {i+1}. {feature}: {score:.4f}")
+                
+        except Exception as e:
+            print(f"SHAP analysis failed: {e}")
+            # Fallback to model feature importance if available
+            if hasattr(best_model.named_steps['clf'], 'feature_importances_'):
+                model = best_model.named_steps['clf']
+                # Get feature names from preprocessing
+                pre = best_model.named_steps['pre']
+                feature_names = []
+                for name, transformer, columns in pre.transformers_:
+                    if name == 'cat':
+                        if hasattr(transformer, 'get_feature_names_out'):
+                            feature_names.extend(transformer.get_feature_names_out(columns))
+                        else:
+                            for i, col in enumerate(columns):
+                                for cat in transformer.categories_[i]:
+                                    feature_names.append(f"{col}_{cat}")
+                    elif name == 'num':
+                        feature_names.extend(columns)
+                
+                importances = model.feature_importances_
+                top_5_indices = np.argsort(importances)[-5:][::-1]
+                top_5_features = [feature_names[i] for i in top_5_indices]
+                top_5_values = importances[top_5_indices]
+                
+                print("Top 5 Features (from model feature_importances_):")
+                for i, (feature, value) in enumerate(zip(top_5_features, top_5_values)):
+                    print(f"{i+1}. {feature}: {value:.4f}")
+            else:
+                print("No feature importance available")
+
     else:
         print("\nNo models were trained successfully")
 
