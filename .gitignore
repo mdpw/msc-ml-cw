@@ -9,6 +9,7 @@ __pycache__/
 # Virtual Environments
 energy-env/
 manufacturing-env/
+banking-env/
 venv/
 env/
 ENV/
@@ -22,3 +23,8 @@ ENV/
 .idea/
 *.swp
 *.swo
+
+# MLflow
+mlruns/
+mlartifacts/
+artifacts/
