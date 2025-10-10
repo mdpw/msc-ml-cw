@@ -21,3 +21,16 @@ This repository contains a full scaffold to complete end-to-end on the UCI Bank 
 ## 6. Serve the best model (after choosing one and exporting it to `models/best_model.joblib` or using MLflow Model URI):
    uvicorn src.serve:app --reload
 
+## Other Execution options
+## Normal training with SHAP
+python -m train
+
+## Fast training without SHAP (development)
+python -m train --skip-shap
+
+## Training with SMOTE and SHAP
+python -m train --smote
+
+## Train only specific models
+python -m train --models rf xgb
+

@@ -2,8 +2,9 @@ import shap
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
-def shap_summary(trained_pipeline, X_sample, max_features=5):
+def shap_summary(trained_pipeline, X_sample, max_features=5, save_dir=None):
     """
     Universal SHAP function that works with any model type.
     
@@ -11,6 +12,7 @@ def shap_summary(trained_pipeline, X_sample, max_features=5):
         trained_pipeline: Trained sklearn pipeline with 'pre' and 'clf' steps
         X_sample: Sample data for SHAP analysis  
         max_features: Number of top features to display
+        save_dir: Directory to save plots (if None, saves to current directory)
     
     Returns:
         tuple: (top_features, importance_scores, model_type)
@@ -124,9 +126,9 @@ def shap_summary(trained_pipeline, X_sample, max_features=5):
         for i, (feature, value) in enumerate(zip(top_features, top_values)):
             print(f"{i+1}. {feature}: {value:.4f}")
         
-        # Create and save feature importance plot
-        _create_shap_plots(top_features, top_values, shap_vals, top_indices, 
-                          X_enc_dense, feature_names, model_name, n_show)
+        # Create and save plots
+        plot_files = _create_shap_plots(top_features, top_values, shap_vals, top_indices, 
+                          X_enc_dense, feature_names, model_name, n_show, save_dir)
         
         return top_features, top_values, model_name
         
@@ -143,14 +145,14 @@ def shap_summary(trained_pipeline, X_sample, max_features=5):
                 print(f"{i+1}. {feature}: {value:.4f}")
             
             # Create plot for fallback method
-            _create_fallback_plot(top_features, top_values, model_name)
+            _create_fallback_plot(top_features, top_values, model_name, save_dir)
         else:
             print("No feature importance method available for this model")
         
         return top_features, top_values, model_name
 
 def _create_shap_plots(top_features, top_values, shap_vals, top_indices, 
-                      X_enc_dense, feature_names, model_name, n_show):
+                      X_enc_dense, feature_names, model_name, n_show, save_dir=None):
     """Create and save SHAP plots"""
     
     # Color mapping for different models
@@ -164,6 +166,13 @@ def _create_shap_plots(top_features, top_values, shap_vals, top_indices,
     }
     
     color = color_map.get(model_name, 'skyblue')
+    plot_files = []
+    
+    # Helper function to get save path
+    def get_save_path(filename):
+        if save_dir:
+            return os.path.join(save_dir, filename)
+        return filename
     
     # 1. Feature importance bar plot
     plt.figure(figsize=(12, 8))
@@ -181,9 +190,10 @@ def _create_shap_plots(top_features, top_values, shap_vals, top_indices,
                 f'{val:.3f}', va='center', fontsize=10)
     
     plt.tight_layout()
-    importance_filename = f'shap_importance_{model_name}.png'
+    importance_filename = get_save_path(f'shap_importance_{model_name}.png')
     plt.savefig(importance_filename, dpi=150, bbox_inches='tight')
-    plt.show()
+    plt.close()  # Close to free memory
+    plot_files.append(importance_filename)
     print(f"SHAP importance plot saved as '{importance_filename}'")
     
     # 2. Try to create official SHAP summary plot
@@ -207,9 +217,10 @@ def _create_shap_plots(top_features, top_values, shap_vals, top_indices,
         plt.title(f'SHAP Summary - Top {n_show} Features ({model_name.upper()})')
         plt.tight_layout()
         
-        summary_filename = f'shap_summary_{model_name}.png'
+        summary_filename = get_save_path(f'shap_summary_{model_name}.png')
         plt.savefig(summary_filename, dpi=150, bbox_inches='tight')
-        plt.show()
+        plt.close()
+        plot_files.append(summary_filename)
         print(f"SHAP summary plot saved as '{summary_filename}'")
         
     except Exception as e:
@@ -222,29 +233,35 @@ def _create_shap_plots(top_features, top_values, shap_vals, top_indices,
         # Create explanation object for waterfall plot
         if hasattr(shap, 'Explanation'):
             # For newer SHAP versions
+            base_value = getattr(explainer, 'expected_value', 0)
+            if isinstance(base_value, (list, np.ndarray)) and len(base_value) > 1:
+                base_value = base_value[1]  # Use positive class for binary
+            
             explanation = shap.Explanation(
                 values=shap_vals[0, top_indices],
-                base_values=0,  # or explainer.expected_value if available
+                base_values=base_value,
                 data=X_enc_dense[0, top_indices],
                 feature_names=top_features
             )
             shap.waterfall_plot(explanation, show=False)
+            
+            plt.title(f'SHAP Waterfall - First Instance ({model_name.upper()})')
+            plt.tight_layout()
+            
+            waterfall_filename = get_save_path(f'shap_waterfall_{model_name}.png')
+            plt.savefig(waterfall_filename, dpi=150, bbox_inches='tight')
+            plt.close()
+            plot_files.append(waterfall_filename)
+            print(f"SHAP waterfall plot saved as '{waterfall_filename}'")
         else:
-            # Fallback for older versions
             print("Waterfall plot requires newer SHAP version")
             
-        plt.title(f'SHAP Waterfall - First Instance ({model_name.upper()})')
-        plt.tight_layout()
-        
-        waterfall_filename = f'shap_waterfall_{model_name}.png'
-        plt.savefig(waterfall_filename, dpi=150, bbox_inches='tight')
-        plt.show()
-        print(f"SHAP waterfall plot saved as '{waterfall_filename}'")
-        
     except Exception as e:
         print(f"SHAP waterfall plot failed: {e}")
+    
+    return plot_files
 
-def _create_fallback_plot(top_features, top_values, model_name):
+def _create_fallback_plot(top_features, top_values, model_name, save_dir=None):
     """Create plot for fallback feature importance"""
     
     plt.figure(figsize=(12, 8))
@@ -262,9 +279,14 @@ def _create_fallback_plot(top_features, top_values, model_name):
                 va='center', fontsize=10)
     
     plt.tight_layout()
-    filename = f'feature_importance_{model_name}.png'
+    
+    if save_dir:
+        filename = os.path.join(save_dir, f'feature_importance_{model_name}.png')
+    else:
+        filename = f'feature_importance_{model_name}.png'
+    
     plt.savefig(filename, dpi=150, bbox_inches='tight')
-    plt.show()
+    plt.close()
     print(f"Feature importance plot saved as '{filename}'")
 
 def _get_fallback_importance(model, feature_names, max_features=5):
@@ -302,11 +324,11 @@ def _get_fallback_importance(model, feature_names, max_features=5):
         return None, None
 
 # Convenience function for easy usage
-def analyze_model(model_path, X_sample, max_features=5):
+def analyze_model(model_path, X_sample, max_features=5, save_dir=None):
     """Load and analyze any saved model"""
     import joblib
     
     trained_pipeline = joblib.load(model_path)
     print(f"Loaded model from: {model_path}")
     
-    return shap_summary(trained_pipeline, X_sample, max_features)
+    return shap_summary(trained_pipeline, X_sample, max_features, save_dir)
