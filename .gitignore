@@ -27,4 +27,3 @@ ENV/
 # MLflow
 mlruns/
 mlartifacts/
-artifacts/

@@ -30,7 +30,9 @@ def plot_and_save_curves(y_true, y_prob, title_prefix, out_dir):
     plt.plot(fpr, tpr)
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title(f'{title_prefix} ROC')
+    # Remove suffix from title for cleaner display
+    display_title = title_prefix.replace('_smote', '').replace('_no_smote', '')
+    plt.title(f'{display_title} ROC')
     plt.grid(True)
     roc_path = f'{out_dir}/{title_prefix}_ROC.png'
     plt.savefig(roc_path, bbox_inches='tight')
@@ -40,7 +42,7 @@ def plot_and_save_curves(y_true, y_prob, title_prefix, out_dir):
     plt.plot(rec, prec)
     plt.xlabel('Recall')
     plt.ylabel('Precision')
-    plt.title(f'{title_prefix} Precision-Recall')
+    plt.title(f'{display_title} Precision-Recall')
     plt.grid(True)
     pr_path = f'{out_dir}/{title_prefix}_PR.png'
     plt.savefig(pr_path, bbox_inches='tight')
@@ -52,7 +54,9 @@ def plot_and_save_confusion(y_true, y_pred, title_prefix, out_dir):
     cm = confusion_matrix(y_true, y_pred)
     plt.figure()
     plt.imshow(cm, interpolation='nearest')
-    plt.title(f'{title_prefix} Confusion Matrix')
+    # Remove suffix from title for cleaner display
+    display_title = title_prefix.replace('_smote', '').replace('_no_smote', '')
+    plt.title(f'{display_title} Confusion Matrix')
     plt.colorbar()
     tick_marks = np.arange(2)
     classes = ['No','Yes']

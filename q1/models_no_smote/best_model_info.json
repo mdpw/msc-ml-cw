@@ -1,0 +1,11 @@
+{
+  "model_type": "rf",
+  "smote": false,
+  "test_auc": 0.8128258555828105,
+  "test_f1": 0.5242424242424243,
+  "threshold": 0.2706974446986359,
+  "best_params": {
+    "clf__max_depth": 12,
+    "clf__min_samples_leaf": 5
+  }
+}

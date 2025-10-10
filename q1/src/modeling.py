@@ -10,8 +10,8 @@ from .config import SEED
 MODELS = {
     'logreg': LogisticRegression(max_iter=2000, solver='lbfgs', class_weight='balanced', random_state=SEED),
     'rf': RandomForestClassifier(n_estimators=600, random_state=SEED, n_jobs=-1),
-    'xgb': XGBClassifier(random_state=SEED, n_estimators=800, tree_method='hist', eval_metric='logloss', use_label_encoder=False),
-    'lgbm': LGBMClassifier(random_state=SEED, n_estimators=800),
+    'xgb': XGBClassifier(random_state=SEED, n_estimators=800, tree_method='hist', eval_metric='logloss'),
+    # 'lgbm': LGBMClassifier(random_state=SEED, n_estimators=800),
     'mlp': MLPClassifier(random_state=SEED, max_iter=300)
 }
 
@@ -19,7 +19,7 @@ PARAMS = {
     'logreg': { 'C':[0.1,1,10] },
     'rf': { 'max_depth':[6,12,None], 'min_samples_leaf':[1,5] },
     'xgb': { 'max_depth':[3,6], 'learning_rate':[0.01,0.05,0.1], 'subsample':[0.8,1.0], 'colsample_bytree':[0.8,1.0] },
-    'lgbm': { 'max_depth':[-1,6,12], 'learning_rate':[0.01,0.05,0.1], 'num_leaves':[31,63,127] },
+    # 'lgbm': { 'max_depth':[-1,6,12], 'learning_rate':[0.01,0.05,0.1], 'num_leaves':[31,63,127] },
     'mlp': { 'hidden_layer_sizes':[(64,),(128,64)], 'alpha':[1e-4,1e-3] }
 }
 

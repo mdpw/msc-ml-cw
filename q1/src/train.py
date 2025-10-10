@@ -28,8 +28,14 @@ def main():
     X_tr, y_tr, X_val, y_val, X_test, y_test, pipe_base = load_splits(smote=args.smote)
 
     results = []
-    out_dir = Path('artifacts')
+    
+    # Create separate output directories based on SMOTE usage
+    suffix = '_smote' if args.smote else '_no_smote'
+    out_dir = Path(f'artifacts{suffix}')
     out_dir.mkdir(exist_ok=True)
+    
+    models_dir = Path(f'models{suffix}')
+    models_dir.mkdir(exist_ok=True)
     
     # Track best model across all experiments
     best_model = None
@@ -77,10 +83,10 @@ def main():
             for k,v in metrics.items():
                 mlflow.log_metric(f'test_{k.lower()}', v)
 
-            # Plots and confusion matrix
-            roc_path, pr_path = plot_and_save_curves(y_test, y_test_prob, f'{key}', str(out_dir))
+            # Plots and confusion matrix - save with suffix in filename
+            roc_path, pr_path = plot_and_save_curves(y_test, y_test_prob, f'{key}{suffix}', str(out_dir))
             y_test_pred = (y_test_prob >= th).astype(int)
-            cm_path = plot_and_save_confusion(y_test, y_test_pred, f'{key}', str(out_dir))
+            cm_path = plot_and_save_confusion(y_test, y_test_pred, f'{key}{suffix}', str(out_dir))
             mlflow.log_artifact(roc_path)
             mlflow.log_artifact(pr_path)
             mlflow.log_artifact(cm_path)
@@ -116,9 +122,6 @@ def main():
 
     # Save the best model for serving
     if best_model is not None:
-        models_dir = Path('models')
-        models_dir.mkdir(exist_ok=True)
-        
         model_path = models_dir / 'best_model.joblib'
         joblib.dump(best_model, model_path)
         
@@ -136,10 +139,10 @@ def main():
     else:
         print("\nNo models were trained successfully")
 
-    # Save results summary
+    # Save results summary with suffix
     if results:
         df = pd.DataFrame(results).sort_values('test_auc', ascending=False)
-        csv_path = out_dir / 'results_summary.csv'
+        csv_path = out_dir / f'results_summary{suffix}.csv'
         df.to_csv(csv_path, index=False)
         
         print(f"\nResults summary saved to: {csv_path}")

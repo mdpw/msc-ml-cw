@@ -1,0 +1,13 @@
+{
+  "model_type": "xgb",
+  "smote": true,
+  "test_auc": 0.809649703405821,
+  "test_f1": 0.5252938170669392,
+  "threshold": 0.28931865096092224,
+  "best_params": {
+    "clf__colsample_bytree": 0.8,
+    "clf__learning_rate": 0.05,
+    "clf__max_depth": 3,
+    "clf__subsample": 0.8
+  }
+}

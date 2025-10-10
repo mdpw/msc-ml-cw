@@ -12,12 +12,12 @@ This repository contains a full scaffold to complete end-to-end on the UCI Bank 
 ## 3. (Optional) Launch MLflow UI in a separate terminal:
    mlflow ui
 
-## 4. Train models (logs to MLflow and saves results/plots as artifacts):
-   python -m src.train --models logreg rf xgb lgbm mlp
+## 4. Train models without SMOT(logs to MLflow and saves results/plots as artifacts):
+   python -m src.train --models logreg rf xgb mlp
    
-## Try SMOTE:
-   python -m src.train --smote --models xgb lgbm rf
+## 5. Train models with SMOT:
+   python -m src.train --smote --models xgb rf
 
-## 5. Serve the best model (after choosing one and exporting it to `models/best_model.joblib` or using MLflow Model URI):
+## 6. Serve the best model (after choosing one and exporting it to `models/best_model.joblib` or using MLflow Model URI):
    uvicorn src.serve:app --reload
 
