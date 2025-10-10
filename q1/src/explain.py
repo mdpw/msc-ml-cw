@@ -1,8 +1,12 @@
 import shap
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend to avoid threading issues
 import matplotlib.pyplot as plt
 import os
+import glob
+import mlflow
 
 def shap_summary(trained_pipeline, X_sample, max_features=5, save_dir=None):
     """
@@ -151,6 +155,235 @@ def shap_summary(trained_pipeline, X_sample, max_features=5, save_dir=None):
         
         return top_features, top_values, model_name
 
+def run_shap_analysis_with_mlflow(best_model, best_model_name, best_model_info, best_auc, X_val, out_dir):
+    """
+    Run SHAP analysis on the best model and log results to MLflow.
+    
+    Args:
+        best_model: Trained pipeline (best performing model)
+        best_model_name: String name of the best model
+        best_model_info: Dictionary with model metadata
+        best_auc: Best AUC score achieved
+        X_val: Validation dataset for SHAP analysis
+        out_dir: Output directory for saving artifacts
+    
+    Returns:
+        dict: SHAP analysis results summary
+    """
+    print("\nGenerating SHAP explanations for best model...")
+    
+    # Start a new MLflow run specifically for SHAP analysis
+    with mlflow.start_run(run_name=f"{best_model_name}_shap_analysis"):
+        try:
+            # Generate SHAP analysis with proper save directory
+            top_features, scores, model_type = shap_summary(
+                best_model, 
+                X_val.sample(min(500, len(X_val)), random_state=42), 
+                max_features=5,
+                save_dir=str(out_dir)
+            )
+            
+            # Log SHAP results as metrics and parameters
+            log_shap_results_to_mlflow(top_features, scores, model_type, X_val)
+            
+            # Log SHAP artifacts to MLflow
+            log_shap_artifacts_to_mlflow(model_type, out_dir)
+            
+            # Create and log summary
+            create_and_log_shap_summary(
+                model_type, best_model_name, best_auc, best_model_info, 
+                top_features, scores, X_val, out_dir
+            )
+            
+            print(f"SHAP analysis completed for {model_type}")
+            print("Top 5 features:")
+            for i, (feature, score) in enumerate(zip(top_features, scores)):
+                print(f"  {i+1}. {feature}: {score:.4f}")
+            
+            return {
+                'status': 'success',
+                'model_type': model_type,
+                'top_features': top_features,
+                'importance_scores': scores
+            }
+                
+        except Exception as e:
+            print(f"SHAP analysis failed: {e}")
+            
+            # Handle SHAP failure with fallback
+            fallback_result = handle_shap_failure(
+                e, best_model, best_model_info, out_dir
+            )
+            
+            return fallback_result
+
+def log_shap_results_to_mlflow(top_features, scores, model_type, X_val):
+    """Log SHAP results as MLflow metrics and parameters"""
+    
+    # Log feature importance scores as metrics (for searching/filtering)
+    for i, (feature, score) in enumerate(zip(top_features, scores)):
+        mlflow.log_metric(f"shap_feature_{i+1}_importance", score)
+        mlflow.log_param(f"shap_feature_{i+1}_name", feature)
+    
+    # Log overall SHAP metadata
+    mlflow.log_param("shap_model_type", model_type)
+    mlflow.log_param("shap_sample_size", min(500, len(X_val)))
+    mlflow.log_param("shap_num_features", len(top_features))
+    mlflow.log_param("shap_status", "success")
+
+def log_shap_artifacts_to_mlflow(model_type, out_dir):
+    """Find and log SHAP plot artifacts to MLflow"""
+    
+    # Find and log SHAP plots created in the artifacts directory
+    shap_plots = glob.glob(os.path.join(str(out_dir), f"shap_*_{model_type}.png"))
+    for plot_path in shap_plots:
+        if os.path.exists(plot_path):
+            mlflow.log_artifact(plot_path, artifact_path="shap_plots")
+            print(f"Logged {plot_path} to MLflow")
+    
+    # Also log feature importance plot if it exists
+    feature_plots = glob.glob(os.path.join(str(out_dir), f"feature_importance_{model_type}.png"))
+    for plot_path in feature_plots:
+        if os.path.exists(plot_path):
+            mlflow.log_artifact(plot_path, artifact_path="shap_plots")
+            print(f"Logged {plot_path} to MLflow")
+
+def create_and_log_shap_summary(model_type, best_model_name, best_auc, best_model_info, 
+                                top_features, scores, X_val, out_dir):
+    """Create and log SHAP summary text file"""
+    
+    shap_summary_path = out_dir / f"shap_summary_{model_type}.txt"
+    with open(shap_summary_path, 'w') as f:
+        f.write(f"SHAP Analysis Summary for {model_type.upper()}\n")
+        f.write("=" * 50 + "\n\n")
+        f.write(f"Model: {best_model_name}\n")
+        f.write(f"Test AUC: {best_auc:.4f}\n")
+        f.write(f"Test F1: {best_model_info['test_f1']:.4f}\n\n")
+        f.write("Top 5 Most Important Features:\n")
+        f.write("-" * 30 + "\n")
+        for i, (feature, score) in enumerate(zip(top_features, scores)):
+            f.write(f"{i+1:2d}. {feature:30s} {score:.4f}\n")
+        f.write(f"\nSample size used: {min(500, len(X_val))}\n")
+        f.write(f"Analysis method: SHAP with {model_type} explainer\n")
+    
+    mlflow.log_artifact(str(shap_summary_path), artifact_path="summaries")
+    print(f"SHAP summary saved to MLflow: {shap_summary_path}")
+
+def handle_shap_failure(error, best_model, best_model_info, out_dir):
+    """Handle SHAP failure and try fallback methods"""
+    
+    # Log the failure
+    mlflow.log_param("shap_status", "failed")
+    mlflow.log_param("shap_error", str(error))
+    
+    # Try fallback to model feature importance
+    if hasattr(best_model.named_steps['clf'], 'feature_importances_'):
+        return create_fallback_analysis(best_model, best_model_info, out_dir)
+    else:
+        mlflow.log_param("fallback_method", "none_available")
+        print("No feature importance available")
+        return {
+            'status': 'failed',
+            'error': str(error),
+            'fallback_available': False
+        }
+
+def create_fallback_analysis(best_model, best_model_info, out_dir):
+    """Create fallback feature importance analysis"""
+    
+    model = best_model.named_steps['clf']
+    pre = best_model.named_steps['pre']
+    
+    # Extract feature names
+    feature_names = []
+    for name, transformer, columns in pre.transformers_:
+        if name == 'cat':
+            if hasattr(transformer, 'get_feature_names_out'):
+                feature_names.extend(transformer.get_feature_names_out(columns))
+            else:
+                for i, col in enumerate(columns):
+                    for cat in transformer.categories_[i]:
+                        feature_names.append(f"{col}_{cat}")
+        elif name == 'num':
+            feature_names.extend(columns)
+    
+    # Get feature importance
+    importances = model.feature_importances_
+    top_5_indices = np.argsort(importances)[-5:][::-1]
+    top_5_features = [feature_names[i] for i in top_5_indices]
+    top_5_values = importances[top_5_indices]
+    
+    # Log fallback results to MLflow
+    for i, (feature, score) in enumerate(zip(top_5_features, top_5_values)):
+        mlflow.log_metric(f"fallback_feature_{i+1}_importance", score)
+        mlflow.log_param(f"fallback_feature_{i+1}_name", feature)
+    
+    mlflow.log_param("fallback_method", "model_feature_importances")
+    
+    print("Top 5 Features (from model feature_importances_):")
+    for i, (feature, value) in enumerate(zip(top_5_features, top_5_values)):
+        print(f"{i+1}. {feature}: {value:.4f}")
+    
+    # Create fallback plot
+    create_fallback_plot(top_5_features, top_5_values, best_model_info, out_dir)
+    
+    # Create fallback summary
+    create_fallback_summary(top_5_features, top_5_values, best_model_info, out_dir)
+    
+    return {
+        'status': 'fallback_success',
+        'model_type': best_model_info['model_type'],
+        'top_features': top_5_features,
+        'importance_scores': top_5_values,
+        'method': 'model_feature_importances'
+    }
+
+def create_fallback_plot(top_5_features, top_5_values, best_model_info, out_dir):
+    """Create and save fallback feature importance plot"""
+    
+    plt.figure(figsize=(12, 8))
+    y_pos = np.arange(len(top_5_features))
+    
+    plt.barh(y_pos, top_5_values, color='lightcoral', alpha=0.8)
+    plt.yticks(y_pos, top_5_features)
+    plt.xlabel('Feature Importance', fontsize=12)
+    plt.title(f'Top 5 Features - {best_model_info["model_type"].upper()} Model (Built-in Importance)', fontsize=14)
+    plt.gca().invert_yaxis()
+    
+    # Add value labels
+    for i, (pos, val) in enumerate(zip(y_pos, top_5_values)):
+        plt.text(val + max(top_5_values)*0.01, pos, f'{val:.3f}', 
+                va='center', fontsize=10)
+    
+    plt.tight_layout()
+    
+    # Save to artifacts directory
+    fallback_plot_path = out_dir / f"feature_importance_{best_model_info['model_type']}.png"
+    plt.savefig(fallback_plot_path, dpi=150, bbox_inches='tight')
+    plt.close()
+    
+    # Log to MLflow
+    mlflow.log_artifact(str(fallback_plot_path), artifact_path="shap_plots")
+    print(f"Fallback plot saved to: {fallback_plot_path}")
+
+def create_fallback_summary(top_5_features, top_5_values, best_model_info, out_dir):
+    """Create and save fallback summary text file"""
+    
+    fallback_summary_path = out_dir / f"fallback_importance_{best_model_info['model_type']}.txt"
+    with open(fallback_summary_path, 'w') as f:
+        f.write(f"Feature Importance (Fallback) for {best_model_info['model_type'].upper()}\n")
+        f.write("=" * 50 + "\n\n")
+        f.write("SHAP analysis failed, using model built-in feature importance\n\n")
+        f.write("Top 5 Most Important Features:\n")
+        f.write("-" * 30 + "\n")
+        for i, (feature, score) in enumerate(zip(top_5_features, top_5_values)):
+            f.write(f"{i+1:2d}. {feature:30s} {score:.4f}\n")
+    
+    mlflow.log_artifact(str(fallback_summary_path), artifact_path="summaries")
+    print(f"Fallback summary saved to: {fallback_summary_path}")
+
+# ===== SHAP PLOTTING FUNCTIONS =====
+
 def _create_shap_plots(top_features, top_values, shap_vals, top_indices, 
                       X_enc_dense, feature_names, model_name, n_show, save_dir=None):
     """Create and save SHAP plots"""
@@ -226,39 +459,6 @@ def _create_shap_plots(top_features, top_values, shap_vals, top_indices,
     except Exception as e:
         print(f"Official SHAP summary plot failed: {e}")
     
-    # 3. Try SHAP waterfall plot for first instance
-    try:
-        plt.figure(figsize=(10, 8))
-        
-        # Create explanation object for waterfall plot
-        if hasattr(shap, 'Explanation'):
-            # For newer SHAP versions
-            base_value = getattr(explainer, 'expected_value', 0)
-            if isinstance(base_value, (list, np.ndarray)) and len(base_value) > 1:
-                base_value = base_value[1]  # Use positive class for binary
-            
-            explanation = shap.Explanation(
-                values=shap_vals[0, top_indices],
-                base_values=base_value,
-                data=X_enc_dense[0, top_indices],
-                feature_names=top_features
-            )
-            shap.waterfall_plot(explanation, show=False)
-            
-            plt.title(f'SHAP Waterfall - First Instance ({model_name.upper()})')
-            plt.tight_layout()
-            
-            waterfall_filename = get_save_path(f'shap_waterfall_{model_name}.png')
-            plt.savefig(waterfall_filename, dpi=150, bbox_inches='tight')
-            plt.close()
-            plot_files.append(waterfall_filename)
-            print(f"SHAP waterfall plot saved as '{waterfall_filename}'")
-        else:
-            print("Waterfall plot requires newer SHAP version")
-            
-    except Exception as e:
-        print(f"SHAP waterfall plot failed: {e}")
-    
     return plot_files
 
 def _create_fallback_plot(top_features, top_values, model_name, save_dir=None):
@@ -323,7 +523,8 @@ def _get_fallback_importance(model, feature_names, max_features=5):
         print(f"Failed to extract fallback importance: {e}")
         return None, None
 
-# Convenience function for easy usage
+# ===== CONVENIENCE FUNCTIONS =====
+
 def analyze_model(model_path, X_sample, max_features=5, save_dir=None):
     """Load and analyze any saved model"""
     import joblib
@@ -332,3 +533,24 @@ def analyze_model(model_path, X_sample, max_features=5, save_dir=None):
     print(f"Loaded model from: {model_path}")
     
     return shap_summary(trained_pipeline, X_sample, max_features, save_dir)
+
+def analyze_model_with_mlflow(model_path, X_sample, model_name="loaded_model", max_features=5, save_dir=None):
+    """Load model and run full SHAP analysis with MLflow logging"""
+    import joblib
+    
+    trained_pipeline = joblib.load(model_path)
+    print(f"Loaded model from: {model_path}")
+    
+    # Create mock model info for the function
+    model_info = {
+        'model_type': type(trained_pipeline.named_steps['clf']).__name__.lower(),
+        'test_f1': 0.0  # Unknown for loaded model
+    }
+    
+    # Use current directory if no save_dir provided
+    if save_dir is None:
+        save_dir = "."
+    
+    return run_shap_analysis_with_mlflow(
+        trained_pipeline, model_name, model_info, 0.0, X_sample, save_dir
+    )
