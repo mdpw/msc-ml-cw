@@ -27,5 +27,3 @@ ENV/
 # MLflow
 mlruns/
 mlartifacts/
-artifacts_no_smote/
-artifacts_smote/

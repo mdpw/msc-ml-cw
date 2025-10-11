@@ -1,0 +1,17 @@
+SHAP Analysis Summary for RANDOMFORESTCLASSIFIER
+==================================================
+
+Model: rf
+Test AUC: 0.8128
+Test F1: 0.5242
+
+Top 5 Most Important Features:
+------------------------------
+ 1. euribor3m                      0.1575
+ 2. nr.employed                    0.1324
+ 3. pdays                          0.0684
+ 4. poutcome_success               0.0638
+ 5. cons.conf.idx                  0.0611
+
+Sample size used: 500
+Analysis method: SHAP with randomforestclassifier explainer

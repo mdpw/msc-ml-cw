@@ -1,0 +1,17 @@
+SHAP Analysis Summary for XGBCLASSIFIER
+==================================================
+
+Model: xgb_smote
+Test AUC: 0.8096
+Test F1: 0.5253
+
+Top 5 Most Important Features:
+------------------------------
+ 1. nr.employed                    0.3993
+ 2. campaign                       0.2550
+ 3. contact_cellular               0.2306
+ 4. default_no                     0.2182
+ 5. euribor3m                      0.1629
+
+Sample size used: 500
+Analysis method: SHAP with xgbclassifier explainer
